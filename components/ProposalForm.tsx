@@ -1,0 +1,138 @@
+
+import React from 'react';
+import { ProposalFormInput } from '../types';
+import Input from './ui/Input';
+import Textarea from './ui/Textarea';
+import Button from './ui/Button';
+import { templates } from '../data/templates';
+
+interface ProposalFormProps {
+    input: ProposalFormInput;
+    onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+    onSubmit: (e: React.FormEvent) => void;
+    isLoading: boolean;
+}
+
+const SparklesIcon = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+        <path fillRule="evenodd" d="M5 2a1 1 0 011 1v1h1a1 1 0 010 2H6v1a1 1 0 01-2 0V6H3a1 1 0 010-2h1V3a1 1 0 011-1zm6 0a1 1 0 011 1v1h1a1 1 0 010 2h-1v1a1 1 0 01-2 0V6h-1a1 1 0 010-2h1V3a1 1 0 011-1zM5 10a1 1 0 011 1v1h1a1 1 0 110 2H6v1a1 1 0 11-2 0v-1H3a1 1 0 110-2h1v-1a1 1 0 011-1z m6 0a1 1 0 011 1v1h1a1 1 0 110 2h-1v1a1 1 0 11-2 0v-1h-1a1 1 0 110-2h1v-1a1 1 0 011-1z" clipRule="evenodd" />
+    </svg>
+)
+
+const ProposalForm: React.FC<ProposalFormProps> = ({ input, onChange, onSubmit, isLoading }) => {
+    const selectedTemplate = templates.find(t => t.id === input.templateId) || templates[0];
+
+    const handleTemplateChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const event = {
+            target: {
+                name: e.target.name,
+                value: e.target.value
+            }
+        } as React.ChangeEvent<HTMLInputElement>;
+        onChange(event);
+    };
+    
+    return (
+        <form onSubmit={onSubmit} className="bg-white p-6 sm:p-8 rounded-xl shadow-lg space-y-6">
+            <div>
+                <h2 className="text-xl font-bold text-slate-800">1. Select a Template</h2>
+                <p className="text-sm text-slate-500 mt-1">Choose a persona for the AI to adopt.</p>
+            </div>
+
+            <div>
+                <label htmlFor="templateId" className="block text-sm font-medium text-slate-700 mb-1">Template</label>
+                <select
+                    id="templateId"
+                    name="templateId"
+                    value={input.templateId}
+                    onChange={handleTemplateChange}
+                    className="block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-brandGreen-500 focus:border-brandGreen-500 sm:text-sm transition duration-150 ease-in-out"
+                >
+                    {templates.map(template => (
+                        <option key={template.id} value={template.id}>
+                            {template.name}
+                        </option>
+                    ))}
+                </select>
+
+                {selectedTemplate && (
+                    <div className="mt-3 p-3 bg-brandGreen-50 rounded-md text-sm text-brandGreen-800 border border-brandGreen-200 space-y-2">
+                        <p>{selectedTemplate.description}</p>
+                        <p className="text-xs opacity-80"><strong className="font-semibold">Persona:</strong> {selectedTemplate.systemInstruction}</p>
+                    </div>
+                )}
+            </div>
+
+            <div className="space-y-1 pt-4 border-t border-slate-200">
+                <h2 className="text-xl font-bold text-slate-800">2. Proposal Details</h2>
+                <p className="text-sm text-slate-500">Provide the key information below.</p>
+            </div>
+            
+            <Input 
+                label="Your Name / Company" 
+                name="executiveName"
+                value={input.executiveName}
+                onChange={onChange}
+                placeholder="e.g., John Smith Consulting"
+            />
+            <Input 
+                label="Your Role" 
+                name="executiveRole"
+                value={input.executiveRole}
+                onChange={onChange}
+                placeholder="e.g., Fractional CFO"
+            />
+            <Input 
+                label="Client Name / Company" 
+                name="clientName"
+                value={input.clientName}
+                onChange={onChange}
+                placeholder="e.g., Innovate Corp"
+            />
+            <Textarea 
+                label="Project Goal"
+                name="projectGoal"
+                value={input.projectGoal}
+                onChange={onChange}
+                placeholder="What is the primary objective for the client?"
+                rows={3}
+            />
+             <Textarea 
+                label="Key Deliverables"
+                name="deliverables"
+                value={input.deliverables}
+                onChange={onChange}
+                placeholder="List main deliverables, separated by commas"
+                rows={3}
+            />
+            <Input 
+                label="Timeline" 
+                name="timeline"
+                value={input.timeline}
+                onChange={onChange}
+                placeholder="e.g., 6-Month Engagement"
+            />
+             <Input 
+                label="Pricing / Fee Structure" 
+                name="price"
+                value={input.price}
+                onChange={onChange}
+                placeholder="e.g., $8,000/month retainer"
+            />
+             <Textarea 
+                label="About You / Company (Optional)"
+                name="executiveAbout"
+                value={input.executiveAbout}
+                onChange={onChange}
+                placeholder="Provide a brief bio, or let the AI generate one for you."
+                rows={4}
+            />
+
+            <Button type="submit" isLoading={isLoading} icon={<SparklesIcon />} className="w-full">
+                Generate Proposal
+            </Button>
+        </form>
+    );
+};
+
+export default ProposalForm;
