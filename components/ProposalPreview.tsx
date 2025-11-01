@@ -36,7 +36,7 @@ const ProposalPreview: React.FC<ProposalPreviewProps> = ({ proposal, onAboutChan
     };
 
     return (
-        <div>
+        <div className="prose prose-slate max-w-none">
             <h2 className="text-3xl font-bold text-center text-slate-900 mb-8">{proposal.title}</h2>
             
             <Section title="Executive Summary">
@@ -48,7 +48,7 @@ const ProposalPreview: React.FC<ProposalPreviewProps> = ({ proposal, onAboutChan
             </Section>
 
             <Section title="Proposed Solution & Scope of Work">
-                <ul className="list-disc pl-5 space-y-2">
+                <ul>
                     {proposal.proposedSolution.map((item, index) => (
                         <li key={index}>{item}</li>
                     ))}

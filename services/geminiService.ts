@@ -1,9 +1,9 @@
-
 import { GoogleGenAI, Type } from "@google/genai";
 import { ProposalFormInput, GeneratedProposal } from '../types';
 import { templates } from '../data/templates';
 
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY as string });
+// FIX: Per coding guidelines, the API key must be obtained exclusively from `process.env.API_KEY`. This also resolves the TypeScript error.
+const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
 const proposalSchema = {
     type: Type.OBJECT,
