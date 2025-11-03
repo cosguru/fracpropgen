@@ -27,4 +27,6 @@ export interface GeneratedProposal {
   investment: string;
   about: string;
   nextSteps: string;
+  termsAndConditions: string[];
+  ninetyDayPlan: string[];
 }

@@ -1,3 +1,4 @@
+
 import React, { useState, useCallback } from 'react';
 import { ProposalFormInput, GeneratedProposal } from './types';
 import ProposalForm from './components/ProposalForm';
@@ -75,7 +76,7 @@ const App: React.FC = () => {
 
     const handleDownloadAndClose = () => {
         if (generatedProposal) {
-            exportToDocx(generatedProposal, formInput.clientName);
+            exportToDocx(generatedProposal, formInput.clientName, formInput.executiveName, formInput.executiveRole);
         }
         setIsModalOpen(false);
     }

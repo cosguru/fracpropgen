@@ -19,8 +19,16 @@ const proposalSchema = {
         investment: { type: Type.STRING },
         about: { type: Type.STRING },
         nextSteps: { type: Type.STRING },
+        termsAndConditions: {
+            type: Type.ARRAY,
+            items: { type: Type.STRING }
+        },
+        ninetyDayPlan: {
+            type: Type.ARRAY,
+            items: { type: Type.STRING }
+        }
     },
-    required: ['title', 'executiveSummary', 'problemStatement', 'proposedSolution', 'timeline', 'investment', 'about', 'nextSteps'],
+    required: ['title', 'executiveSummary', 'problemStatement', 'proposedSolution', 'timeline', 'investment', 'about', 'nextSteps', 'termsAndConditions', 'ninetyDayPlan'],
 };
 
 export const generateProposalContent = async (
@@ -60,6 +68,8 @@ export const generateProposalContent = async (
         - investment: A confirmation of the pricing structure.
         - about: The content for the 'About' section, generated or refined as per the instructions above.
         - nextSteps: Clear next steps for the client to engage.
+        - termsAndConditions: A list of standard professional service terms. Include items for 'Payment Terms', 'Confidentiality', and 'Termination'.
+        - ninetyDayPlan: A high-level 30-60-90 day plan as a list of three strings. The first string for Month 1 (Discovery & Planning), the second for Month 2 (Execution & Implementation), and the third for Month 3 (Optimization & Reporting). Base the specifics on the project goal and deliverables.
 
         The tone should be confident, professional, and client-focused. Ensure the output is a single, valid JSON object.
     `;

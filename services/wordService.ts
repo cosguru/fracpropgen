@@ -8,6 +8,9 @@ import {
     AlignmentType,
     BorderStyle,
     WidthType,
+    Table,
+    TableRow,
+    TableCell,
 } from 'docx';
 import saveAs from 'file-saver';
 import { GeneratedProposal } from '../types';
@@ -42,8 +45,53 @@ const createSection = (title: string, children: (Paragraph | TextRun)[]): Paragr
     return [heading, ...content];
 };
 
+const createSignatureBlock = (clientName: string, executiveName: string, executiveRole: string): Table => {
+    const signatureLine = new Paragraph({
+        children: [new TextRun({ text: "____________________________", size: 22 })],
+        spacing: { before: 200 },
+    });
+    
+    return new Table({
+        columnWidths: [4535, 4535],
+        borders: {
+            top: { style: BorderStyle.NONE, size: 0, color: "FFFFFF" },
+            bottom: { style: BorderStyle.NONE, size: 0, color: "FFFFFF" },
+            left: { style: BorderStyle.NONE, size: 0, color: "FFFFFF" },
+            right: { style: BorderStyle.NONE, size: 0, color: "FFFFFF" },
+            insideHorizontal: { style: BorderStyle.NONE, size: 0, color: "FFFFFF" },
+            insideVertical: { style: BorderStyle.NONE, size: 0, color: "FFFFFF" },
+        },
+        rows: [
+            new TableRow({
+                children: [
+                    new TableCell({
+                        children: [
+                            new Paragraph({ text: "For Client:", spacing: { after: 100 } }),
+                            signatureLine,
+                            new Paragraph({ text: `Name: ${clientName}` }),
+                            new Paragraph({ text: "Title: " }),
+                            new Paragraph({ text: "Date: " }),
+                        ],
+                        width: { size: 4535, type: WidthType.DXA },
+                    }),
+                    new TableCell({
+                        children: [
+                            new Paragraph({ text: "For Consultant:", spacing: { after: 100 } }),
+                            signatureLine,
+                            new Paragraph({ text: `Name: ${executiveName}` }),
+                            new Paragraph({ text: `Title: ${executiveRole}` }),
+                            new Paragraph({ text: "Date: " }),
+                        ],
+                        width: { size: 4535, type: WidthType.DXA },
+                    }),
+                ],
+            }),
+        ],
+    });
+};
 
-export const exportToDocx = (proposal: GeneratedProposal, clientName: string) => {
+
+export const exportToDocx = (proposal: GeneratedProposal, clientName: string, executiveName: string, executiveRole: string) => {
     const doc = new Document({
         sections: [{
             properties: {},
@@ -78,10 +126,46 @@ export const exportToDocx = (proposal: GeneratedProposal, clientName: string) =>
                     indent: { left: 720, hanging: 360 },
                     spacing: { after: 150 },
                 }))),
+                ...createSection("90-Day Plan", proposal.ninetyDayPlan.map(item => new Paragraph({
+                    text: item,
+                    bullet: { level: 0 },
+                    indent: { left: 720, hanging: 360 },
+                    spacing: { after: 150 },
+                }))),
                 ...createSection("Timeline", [new TextRun(proposal.timeline)]),
                 ...createSection("Investment", [new TextRun(proposal.investment)]),
                 ...createSection("About", [new TextRun(proposal.about)]),
                 ...createSection("Next Steps", [new TextRun(proposal.nextSteps)]),
+                new Paragraph({
+                    children: [
+                        new TextRun({
+                            text: "Disclaimer: This proposal is a template and is not a substitute for legal advice. All information, including the Terms & Conditions, should be reviewed by a qualified legal representative before signing.",
+                            italics: true,
+                            color: "888888",
+                            size: 20, // 10pt
+                        }),
+                    ],
+                    spacing: { before: 400, after: 200 },
+                }),
+                ...createSection("Terms & Conditions", proposal.termsAndConditions.map(item => new Paragraph({
+                    text: item,
+                    bullet: { level: 0 },
+                    indent: { left: 720, hanging: 360 },
+                    spacing: { after: 150 },
+                }))),
+                new Paragraph({
+                    children: [new TextRun({ text: "Agreement & Signature", bold: true, size: 28 })],
+                    spacing: { before: 400, after: 300 },
+                     border: {
+                        bottom: {
+                            color: "auto",
+                            space: 1,
+                            style: BorderStyle.SINGLE,
+                            size: 6,
+                        },
+                    },
+                }),
+                createSignatureBlock(clientName, executiveName, executiveRole),
             ],
         }],
         styles: {
