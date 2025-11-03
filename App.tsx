@@ -1,12 +1,14 @@
-
 import React, { useState, useCallback } from 'react';
 import { ProposalFormInput, GeneratedProposal } from './types';
 import ProposalForm from './components/ProposalForm';
 import ProposalPreview from './components/ProposalPreview';
 import { generateProposalContent } from './services/geminiService';
 import { exportToDocx } from './services/wordService';
+import { sendLeadToZapier } from './services/zapierService';
 import Loader from './components/ui/Loader';
 import Button from './components/ui/Button';
+import Modal from './components/ui/Modal';
+import LeadCaptureForm from './components/LeadCaptureForm';
 
 const DownloadIcon = () => (
     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
@@ -30,6 +32,7 @@ const App: React.FC = () => {
     const [generatedProposal, setGeneratedProposal] = useState<GeneratedProposal | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     const handleFormChange = useCallback((e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
@@ -60,10 +63,23 @@ const App: React.FC = () => {
         }
     };
     
-    const handleDownload = () => {
+    const handleDownloadClick = () => {
+        if (generatedProposal) {
+            setIsModalOpen(true);
+        }
+    };
+
+    const handleLeadCaptureSubmit = async (name: string, email: string) => {
+        // Send lead to Zapier, but don't block download if it fails for any reason.
+        await sendLeadToZapier(name, email);
+    
+        // Trigger the download
         if (generatedProposal) {
             exportToDocx(generatedProposal, formInput.clientName);
         }
+        
+        // Close the modal
+        setIsModalOpen(false);
     };
 
 
@@ -116,7 +132,7 @@ const App: React.FC = () => {
                                         </div>
                                         <div className="mt-auto pt-6 border-t border-slate-200 text-center">
                                            <Button
-                                                onClick={handleDownload}
+                                                onClick={handleDownloadClick}
                                                 icon={<DownloadIcon />}
                                                 className="w-full sm:w-auto"
                                             >
@@ -148,6 +164,10 @@ const App: React.FC = () => {
                     </p>
                 </div>
             </footer>
+
+            <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="Download Proposal">
+                <LeadCaptureForm onSubmit={handleLeadCaptureSubmit} onClose={() => setIsModalOpen(false)} />
+            </Modal>
         </div>
     );
 };
