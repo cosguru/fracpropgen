@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import Input from './ui/Input';
 import Button from './ui/Button';
@@ -124,6 +123,9 @@ const LeadCaptureForm: React.FC<LeadCaptureFormProps> = ({ onSubmit, onSuccessCo
                     'Download Now'
                    )}
                 </Button>
+                 <p className="text-xs text-slate-500 text-center mt-3">
+                    We hate spam. By downloading this proposal, you agree to opt in to our marketing emails for the latest updates. Unsubscribe anytime.
+                </p>
             </div>
         </form>
     );

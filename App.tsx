@@ -1,4 +1,3 @@
-
 import React, { useState, useCallback } from 'react';
 import { ProposalFormInput, GeneratedProposal } from './types';
 import ProposalForm from './components/ProposalForm';
@@ -83,18 +82,7 @@ const App: React.FC = () => {
 
 
     return (
-        <div className="min-h-screen font-sans text-slate-800 flex flex-col">
-             <header className="bg-white border-b border-slate-200 sticky top-0 z-10">
-                <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4">
-                   <h1 className="text-xl font-bold text-slate-900">FractionalProposal.com</h1>
-                </div>
-            </header>
-            
-            <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 text-center">
-                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-900 tracking-tight">Create Winning Proposals in Minutes</h2>
-                <p className="text-slate-600 mt-4 text-lg max-w-2xl mx-auto">Leverage AI to instantly generate professional, high-converting proposals for your fractional executive services.</p>
-            </div>
-
+        <>
             <main className="container mx-auto px-4 sm:px-6 lg:px-8 pb-12 flex-grow">
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
                     <div className="lg:col-span-5 xl:col-span-4">
@@ -153,16 +141,6 @@ const App: React.FC = () => {
                     </div>
                 </div>
             </main>
-            <footer className="border-t border-slate-200 text-slate-500 text-sm text-center py-6 px-4 sm:px-6 lg:px-8">
-                <div className="container mx-auto">
-                    <p className="mb-2">
-                        Copyright © {new Date().getFullYear()} <a href="https://fractionalofficer.com" target="_blank" rel="noopener noreferrer" className="font-medium text-slate-600 underline hover:text-brandGreen-600 transition-colors">FractionalOfficer.com</a>, a Decebal Ventures LLC asset. All Rights Reserved.
-                    </p>
-                    <p>
-                        Powered by Google Gemini. Created with ❤️ in San Antonio, Texas.
-                    </p>
-                </div>
-            </footer>
 
             <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="Download Proposal">
                 <LeadCaptureForm 
@@ -170,7 +148,7 @@ const App: React.FC = () => {
                     onSuccessComplete={handleDownloadAndClose}
                 />
             </Modal>
-        </div>
+        </>
     );
 };
 
