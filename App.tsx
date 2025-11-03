@@ -1,10 +1,11 @@
+
 import React, { useState, useCallback } from 'react';
 import { ProposalFormInput, GeneratedProposal } from './types';
 import ProposalForm from './components/ProposalForm';
 import ProposalPreview from './components/ProposalPreview';
 import { generateProposalContent } from './services/geminiService';
 import { exportToDocx } from './services/wordService';
-import { sendLeadToZapier } from './services/zapierService';
+import { sendLeadToSysteme } from './services/zapierService';
 import Loader from './components/ui/Loader';
 import Button from './components/ui/Button';
 import Modal from './components/ui/Modal';
@@ -69,18 +70,16 @@ const App: React.FC = () => {
         }
     };
 
-    const handleLeadCaptureSubmit = async (name: string, email: string) => {
-        // Send lead to Zapier, but don't block download if it fails for any reason.
-        await sendLeadToZapier(name, email);
-    
-        // Trigger the download
+    const handleLeadSubmission = async (name: string, email: string) => {
+        return await sendLeadToSysteme(name, email);
+    };
+
+    const handleDownloadAndClose = () => {
         if (generatedProposal) {
             exportToDocx(generatedProposal, formInput.clientName);
         }
-        
-        // Close the modal
         setIsModalOpen(false);
-    };
+    }
 
 
     return (
@@ -166,7 +165,10 @@ const App: React.FC = () => {
             </footer>
 
             <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="Download Proposal">
-                <LeadCaptureForm onSubmit={handleLeadCaptureSubmit} onClose={() => setIsModalOpen(false)} />
+                <LeadCaptureForm 
+                    onSubmit={handleLeadSubmission} 
+                    onSuccessComplete={handleDownloadAndClose}
+                />
             </Modal>
         </div>
     );
