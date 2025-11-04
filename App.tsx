@@ -5,7 +5,7 @@ import ProposalForm from './components/ProposalForm';
 import ProposalPreview from './components/ProposalPreview';
 import { generateProposalContent } from './services/geminiService';
 import { exportToDocx } from './services/wordService';
-import { sendLeadToSysteme } from './services/zapierService';
+import { sendLeadToSysteme } from './services/systemeService';
 import Loader from './components/ui/Loader';
 import Button from './components/ui/Button';
 import Modal from './components/ui/Modal';
@@ -19,6 +19,21 @@ const DownloadIcon = () => (
 );
 
 const defaultTemplate = templates[0];
+
+/**
+ * ===================================================================
+ * ACTION REQUIRED: Set Your Systeme.io Tag ID
+ * ===================================================================
+ * To automatically tag new contacts in Systeme.io, replace the placeholder
+ * value `123` below with your actual Tag ID.
+ *
+ * How to find your Tag ID:
+ * 1. In Systeme.io, go to Contacts > Tags.
+ * 2. Click to edit the tag you want to use.
+ * 3. The ID is the number in the URL (e.g., .../tags/12345/edit).
+ * ===================================================================
+ */
+const SYSTEME_TAG_ID = 494992; // <-- Replace 123 with your actual Tag ID
 
 const App: React.FC = () => {
     const [formInput, setFormInput] = useState<ProposalFormInput>({
@@ -88,7 +103,7 @@ const App: React.FC = () => {
     };
 
     const handleLeadSubmission = async (name: string, email: string) => {
-        return await sendLeadToSysteme(name, email);
+        return await sendLeadToSysteme(name, email, [SYSTEME_TAG_ID]);
     };
 
     const handleDownloadAndClose = () => {

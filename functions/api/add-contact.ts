@@ -5,12 +5,13 @@ interface Env {
 interface RequestBody {
     name: string;
     email: string;
+    tags?: number[];
 }
 
 // Cloudflare Pages function to add a contact to Systeme.io
 export const onRequestPost = async (context: { request: Request; env: Env }): Promise<Response> => {
     try {
-        const { name, email }: RequestBody = await context.request.json();
+        const { name, email, tags }: RequestBody = await context.request.json();
         const apiKey = context.env.SYSTEME_API_KEY;
 
         if (!apiKey) {
@@ -25,6 +26,16 @@ export const onRequestPost = async (context: { request: Request; env: Env }): Pr
         const [firstName, ...lastNameParts] = name.split(' ');
         const lastName = lastNameParts.join(' ');
 
+        const payload: any = {
+            email: email,
+            firstName: firstName,
+            lastName: lastName,
+        };
+
+        if (tags && Array.isArray(tags) && tags.length > 0) {
+            payload.tags = tags;
+        }
+
         const response = await fetch('https://api.systeme.io/api/contacts', {
             method: 'POST',
             headers: {
@@ -32,11 +43,7 @@ export const onRequestPost = async (context: { request: Request; env: Env }): Pr
                 'Accept': 'application/json',
                 'X-API-Key': apiKey,
             },
-            body: JSON.stringify({
-                email: email,
-                firstName: firstName,
-                lastName: lastName,
-            }),
+            body: JSON.stringify(payload),
         });
 
         if (!response.ok) {
