@@ -10,6 +10,7 @@ import Loader from './components/ui/Loader';
 import Button from './components/ui/Button';
 import Modal from './components/ui/Modal';
 import LeadCaptureForm from './components/LeadCaptureForm';
+import { templates } from './data/templates';
 
 const DownloadIcon = () => (
     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
@@ -17,17 +18,19 @@ const DownloadIcon = () => (
     </svg>
 );
 
+const defaultTemplate = templates[0];
+
 const App: React.FC = () => {
     const [formInput, setFormInput] = useState<ProposalFormInput>({
         executiveName: 'Jane Doe',
-        executiveRole: 'Fractional CMO',
         clientName: 'Acme Inc.',
-        projectGoal: 'Increase lead generation by 50% in the next quarter.',
-        deliverables: 'Marketing strategy audit, New content marketing plan, SEO optimization roadmap',
+        executiveRole: defaultTemplate.exampleData.executiveRole,
+        projectGoal: defaultTemplate.exampleData.projectGoal,
+        deliverables: defaultTemplate.exampleData.deliverables,
+        price: defaultTemplate.exampleData.price,
         timeline: '3-Month Engagement',
-        price: '$5,000/month retainer',
         executiveAbout: '',
-        templateId: 'strategic-leader', // Default template
+        templateId: defaultTemplate.id,
     });
 
     const [generatedProposal, setGeneratedProposal] = useState<GeneratedProposal | null>(null);
@@ -38,6 +41,20 @@ const App: React.FC = () => {
     const handleFormChange = useCallback((e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
         setFormInput(prev => ({ ...prev, [name]: value }));
+    }, []);
+    
+    const handleTemplateChange = useCallback((templateId: string) => {
+        const selectedTemplate = templates.find(t => t.id === templateId);
+        if (selectedTemplate) {
+            setFormInput(prev => ({
+                ...prev,
+                templateId: selectedTemplate.id,
+                executiveRole: selectedTemplate.exampleData.executiveRole,
+                projectGoal: selectedTemplate.exampleData.projectGoal,
+                deliverables: selectedTemplate.exampleData.deliverables,
+                price: selectedTemplate.exampleData.price,
+            }));
+        }
     }, []);
 
     const handleAboutChange = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -90,6 +107,7 @@ const App: React.FC = () => {
                         <ProposalForm 
                             input={formInput} 
                             onChange={handleFormChange} 
+                            onTemplateChange={handleTemplateChange}
                             onSubmit={handleSubmit}
                             isLoading={isLoading} 
                         />

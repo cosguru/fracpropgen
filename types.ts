@@ -4,6 +4,12 @@ export interface ProposalTemplate {
   name: string;
   description: string;
   systemInstruction: string;
+  exampleData: {
+    executiveRole: string;
+    projectGoal: string;
+    deliverables: string;
+    price: string;
+  };
 }
 
 export interface ProposalFormInput {

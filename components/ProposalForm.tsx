@@ -9,6 +9,7 @@ import { templates } from '../data/templates';
 interface ProposalFormProps {
     input: ProposalFormInput;
     onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+    onTemplateChange: (templateId: string) => void;
     onSubmit: (e: React.FormEvent) => void;
     isLoading: boolean;
 }
@@ -19,17 +20,11 @@ const SparklesIcon = () => (
     </svg>
 )
 
-const ProposalForm: React.FC<ProposalFormProps> = ({ input, onChange, onSubmit, isLoading }) => {
+const ProposalForm: React.FC<ProposalFormProps> = ({ input, onChange, onTemplateChange, onSubmit, isLoading }) => {
     const selectedTemplate = templates.find(t => t.id === input.templateId) || templates[0];
 
-    const handleTemplateChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        const event = {
-            target: {
-                name: e.target.name,
-                value: e.target.value
-            }
-        } as React.ChangeEvent<HTMLInputElement>;
-        onChange(event);
+    const handleTemplateSelectionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        onTemplateChange(e.target.value);
     };
     
     return (
@@ -45,7 +40,7 @@ const ProposalForm: React.FC<ProposalFormProps> = ({ input, onChange, onSubmit, 
                     id="templateId"
                     name="templateId"
                     value={input.templateId}
-                    onChange={handleTemplateChange}
+                    onChange={handleTemplateSelectionChange}
                     className="block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-brandGreen-500 focus:border-brandGreen-500 sm:text-sm transition duration-150 ease-in-out"
                 >
                     {templates.map(template => (
