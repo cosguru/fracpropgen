@@ -18,6 +18,89 @@ const DownloadIcon = () => (
     </svg>
 );
 
+const StaticContent = () => (
+    <div className="container mx-auto px-4 sm:px-6 lg:px-8 pb-12">
+        <div className="bg-white p-8 rounded-xl shadow-lg max-w-4xl mx-auto">
+            <section id="template" className="mb-12 scroll-mt-20">
+                <h2 className="text-2xl font-bold text-slate-900 mb-4">What’s Inside Our Consulting Proposal Template?</h2>
+                <p className="text-slate-600 mb-4">Our AI-generated template provides a complete, professionally structured document with all the essential sections you need to win projects:</p>
+                <ul className="list-disc list-inside space-y-2 text-slate-700">
+                    <li><strong>Scope of Work:</strong> Clearly defined deliverables and objectives. Our AI helps you craft the perfect <strong className="font-semibold">consulting scope of work template</strong>.</li>
+                    <li><strong>Pricing & Investment:</strong> Flexible section to detail your fees, whether it's a retainer, fixed project, or hourly.</li>
+                    <li><strong>Terms & Conditions:</strong> A standard section for payment terms, confidentiality, and termination clauses.</li>
+                    <li><strong>Signature Block:</strong> A dedicated space for client and consultant signatures to formalize the agreement.</li>
+                    <li><strong>90-Day Plan:</strong> A high-level roadmap outlining key milestones for the initial engagement period.</li>
+                </ul>
+            </section>
+
+            <section id="examples" className="mb-12 scroll-mt-20">
+                <h2 className="text-2xl font-bold text-slate-900 mb-4">Consulting Proposal Examples</h2>
+                <p className="text-slate-600 mb-6">Our AI adapts its writing style based on the template you choose. Here are a few <strong>consulting proposal examples</strong> of what you can create:</p>
+                <div className="grid md:grid-cols-3 gap-6 text-center">
+                    <div className="bg-slate-50 p-4 rounded-lg border border-slate-200">
+                        <h3 className="font-semibold text-slate-800">Strategic Plan</h3>
+                        <p className="text-sm text-slate-600 mt-1">A high-level proposal for a business strategy overhaul project.</p>
+                    </div>
+                    <div className="bg-slate-50 p-4 rounded-lg border border-slate-200">
+                        <h3 className="font-semibold text-slate-800">Fractional CMO</h3>
+                        <p className="text-sm text-slate-600 mt-1">A growth-focused <strong>fractional cmo proposal template</strong> for marketing leadership.</p>
+                    </div>
+                    <div className="bg-slate-50 p-4 rounded-lg border border-slate-200">
+                        <h3 className="font-semibold text-slate-800">Monthly Retainer</h3>
+                        <p className="text-sm text-slate-600 mt-1">A proposal for ongoing advisory services with a recurring monthly fee.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="formats" className="mb-12 scroll-mt-20">
+                <h2 className="text-2xl font-bold text-slate-900 mb-4">Available in Your Favorite Format</h2>
+                <p className="text-slate-600">Once generated, you can instantly download your proposal as a Microsoft Word document, the most common format for easy editing and sharing.</p>
+                <ul className="list-disc list-inside space-y-2 text-slate-700 mt-4">
+                    <li><strong>Microsoft Word (.docx):</strong> Download a <strong>free consulting proposal template word</strong> document, fully editable and ready to be customized with your branding.</li>
+                </ul>
+            </section>
+
+            <section id="how-to" className="mb-12 scroll-mt-20">
+                <h2 className="text-2xl font-bold text-slate-900 mb-4">How to Customize Your Proposal in 5 Steps</h2>
+                <p className="text-slate-600 mb-4">Creating your proposal is simple and fast:</p>
+                <ol className="list-decimal list-inside space-y-2 text-slate-700">
+                    <li><strong>Select a Template:</strong> Choose an AI persona that matches your role (e.g., Fractional CMO, CFO, CTO).</li>
+                    <li><strong>Enter Key Details:</strong> Fill in your name, client name, project goal, deliverables, timeline, and pricing.</li>
+                    <li><strong>Generate with AI:</strong> Click "Generate Proposal" and let our AI craft the entire document in seconds.</li>
+                    <li><strong>Review and Refine:</strong> Read through the generated text. You can edit the "About Me" section directly in the browser.</li>
+                    <li><strong>Download:</strong> Enter your details and download the final document as a Word file.</li>
+                </ol>
+            </section>
+            
+            <section id="faq" className="scroll-mt-20">
+                <h2 className="text-2xl font-bold text-slate-900 mb-4">Frequently Asked Questions</h2>
+                <div className="space-y-4">
+                    <div>
+                        <h3 className="font-semibold text-slate-800">How long should a consulting proposal be?</h3>
+                        <p className="text-slate-600 text-sm mt-1">A good consulting proposal is typically 5-10 pages long. It should be concise yet comprehensive, clearly outlining the problem, your proposed solution, scope, timeline, and investment. Our AI generator creates a perfectly structured proposal of optimal length.</p>
+                    </div>
+                    <div>
+                        <h3 className="font-semibold text-slate-800">How do you price a consulting proposal?</h3>
+                        <p className="text-slate-600 text-sm mt-1">Pricing can be structured as a fixed project fee, hourly rate, or a monthly retainer. The best method depends on the project's scope and client relationship. Our tool allows you to input any pricing structure, like a <strong>consulting retainer proposal template</strong>, which is then professionally formatted.</p>
+                    </div>
+                    <div>
+                        <h3 className="font-semibold text-slate-800">What is the difference between a scope of work and a statement of work (SOW)?</h3>
+                        <p className="text-slate-600 text-sm mt-1">A 'Scope of Work' is a section within a proposal that details the services, deliverables, and timelines. A 'Statement of Work' (SOW) is often a more formal, standalone legal document that expands on the scope with detailed terms, conditions, and standards. Our template provides a clear scope of work that can easily be expanded into an SOW.</p>
+                    </div>
+                    <div>
+                        <h3 className="font-semibold text-slate-800">Is a retainer or fixed-price project better?</h3>
+                        <p className="text-slate-600 text-sm mt-1">A retainer is ideal for ongoing, strategic advisory work where the scope may evolve, providing predictable revenue. A fixed-price project is best for well-defined projects with clear start and end dates. The choice depends on the nature of the engagement and client needs.</p>
+                    </div>
+                    <div>
+                        <h3 className="font-semibold text-slate-800">Can I add an e-signature to the downloaded proposal?</h3>
+                        <p className="text-slate-600 text-sm mt-1">Yes. The generated Word document includes a standard signature block. You can easily upload it to any e-signature service like DocuSign or PandaDoc to collect legally binding digital signatures from your clients.</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+);
+
 const defaultTemplate = templates[0];
 
 /**
@@ -149,19 +232,18 @@ const App: React.FC = () => {
     return (
         <>
             <main className="container mx-auto px-4 sm:px-6 lg:px-8 pb-12 flex-grow">
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
-                    <div className="lg:col-span-5 xl:col-span-4">
-                        <ProposalForm 
-                            input={formInput} 
-                            onChange={handleFormChange} 
-                            onTemplateChange={handleTemplateChange}
-                            onSubmit={handleSubmit}
-                            isLoading={isLoading} 
-                        />
-                    </div>
-                    <div className="lg:col-span-7 xl:col-span-8">
-                        <div className="bg-white p-2 sm:p-3 rounded-xl shadow-lg h-full flex flex-col">
-                            <div className="p-4 sm:p-6 flex flex-col flex-grow h-full">
+                <div className="max-w-4xl mx-auto">
+                    <ProposalForm 
+                        input={formInput} 
+                        onChange={handleFormChange} 
+                        onTemplateChange={handleTemplateChange}
+                        onSubmit={handleSubmit}
+                        isLoading={isLoading} 
+                    />
+
+                    <div className="mt-8 lg:mt-12">
+                        <div className="bg-white p-2 sm:p-3 rounded-xl shadow-lg flex flex-col">
+                            <div className="p-4 sm:p-6 flex flex-col flex-grow min-h-[500px]">
                                 {isLoading ? (
                                     <div className="flex-grow flex flex-col items-center justify-center text-center w-full max-w-sm mx-auto">
                                         <ProgressBar progress={progress} />
@@ -176,7 +258,7 @@ const App: React.FC = () => {
                                         </div>
                                     </div>
                                 ) : generatedProposal ? (
-                                    <div className="flex flex-col flex-grow h-full">
+                                    <div className="flex flex-col flex-grow">
                                         <div className="flex-grow overflow-y-auto pr-2">
                                             <ProposalPreview 
                                                 proposal={generatedProposal}
@@ -191,6 +273,14 @@ const App: React.FC = () => {
                                             >
                                                 Download as Word Doc
                                             </Button>
+                                            <a
+                                                href="https://forms.gle/YFxavJGmj66xBCcaA"
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="mt-4 inline-block text-sm text-slate-500 hover:text-slate-700 hover:underline transition-colors"
+                                            >
+                                                Provide Feedback
+                                            </a>
                                         </div>
                                     </div>
                                 ) : (
@@ -199,7 +289,7 @@ const App: React.FC = () => {
                                           <path strokeLinecap="round" strokeLinejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
                                         </svg>
                                         <h3 className="text-lg font-semibold text-slate-700">Your Proposal Will Appear Here</h3>
-                                        <p className="mt-1 max-w-md text-sm">Fill out the form on the left to generate an AI-powered proposal.</p>
+                                        <p className="mt-1 max-w-md text-sm">Fill out the form to generate an AI-powered proposal.</p>
                                     </div>
                                 )}
                             </div>
@@ -207,6 +297,8 @@ const App: React.FC = () => {
                     </div>
                 </div>
             </main>
+
+            <StaticContent />
 
             <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="Download Proposal">
                 <LeadCaptureForm 
