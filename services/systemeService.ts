@@ -1,4 +1,3 @@
-
 /**
  * ===================================================================
  * HOW TO SET UP YOUR SYSTEME.IO INTEGRATION
@@ -31,7 +30,7 @@
 
 export const sendLeadToSysteme = async (firstName: string, lastName: string, email: string, tags?: number[]): Promise<boolean> => {
     try {
-        // This fetch call goes to our own Cloudflare Function, not directly to Systeme.io.
+        // This fetch call goes to our own Cloudflare Function, not directly to external services.
         // The function is located at /functions/api/add-contact.ts
         const response = await fetch('/api/add-contact', {
             method: 'POST',
@@ -49,7 +48,7 @@ export const sendLeadToSysteme = async (firstName: string, lastName: string, ema
 
         return true; // Success
     } catch (error) {
-        console.error('Error sending lead to systeme.io service:', error);
+        console.error('Error sending lead via service:', error);
         return false;
     }
 };

@@ -16,23 +16,20 @@ export const onRequestPost = async (context: { request: Request; env: Env }): Pr
         const { firstName, lastName, email, tags }: RequestBody = await context.request.json();
         const apiKey = context.env.SYSTEME_API_KEY;
 
-        if (!apiKey) {
-            console.error("SYSTEME_API_KEY is not configured in Cloudflare environment variables.");
-            return new Response(JSON.stringify({ error: 'Server configuration error.' }), { status: 500 });
+        if (!firstName || !lastName || !email) {
+            return new Response(JSON.stringify({ error: 'First name, last name, and email are required.' }), { status: 400, headers: { 'Content-Type': 'application/json' } });
         }
 
-        if (!firstName || !lastName || !email) {
-            return new Response(JSON.stringify({ error: 'First name, last name, and email are required.' }), { status: 400 });
+        if (!apiKey) {
+            console.error("SYSTEME_API_KEY is not configured in Cloudflare environment variables.");
+            return new Response(JSON.stringify({ error: 'Server configuration error.' }), { status: 500, headers: { 'Content-Type': 'application/json' } });
         }
-        
-        // Use a single, atomic API call to create/update the contact and apply tags.
-        // Systeme.io's /api/contacts endpoint acts as an "upsert" based on the email,
-        // and it accepts a 'tags' array directly.
+
         const payload = {
             email: email,
             firstName: firstName,
             lastName: lastName,
-            tags: tags && Array.isArray(tags) ? tags : [], // Ensure tags is an array
+            tags: tags && Array.isArray(tags) ? tags : [],
         };
 
         const response = await fetch('https://api.systeme.io/api/contacts', {
@@ -49,15 +46,15 @@ export const onRequestPost = async (context: { request: Request; env: Env }): Pr
 
         if (!response.ok) {
             console.error("Systeme.io API Error:", responseData);
-            const errorMessage = responseData?.errors ? JSON.stringify(responseData.errors) : 'Failed to create or update contact.';
-            return new Response(JSON.stringify({ error: errorMessage }), { status: response.status });
+            const errorMessage = responseData?.errors ? JSON.stringify(responseData.errors) : 'Failed to create or update contact in Systeme.io.';
+            return new Response(JSON.stringify({ error: errorMessage }), { status: response.status, headers: { 'Content-Type': 'application/json' } });
         }
-        
-        console.log(`Successfully created/updated contact for ${email} with tags.`);
-        return new Response(JSON.stringify({ success: true, data: responseData }), { status: 200 });
+
+        console.log(`Successfully created/updated contact for ${email} in Systeme.io.`);
+        return new Response(JSON.stringify({ success: true, data: responseData }), { status: 200, headers: { 'Content-Type': 'application/json' } });
 
     } catch (error) {
         console.error('Error processing request:', error);
-        return new Response(JSON.stringify({ error: 'An unexpected error occurred.' }), { status: 500 });
+        return new Response(JSON.stringify({ error: 'An unexpected error occurred.' }), { status: 500, headers: { 'Content-Type': 'application/json' } });
     }
 };
