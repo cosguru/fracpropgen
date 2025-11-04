@@ -46,16 +46,16 @@ const StaticContent = () => (
                 <p className="text-slate-600 mb-6">Our AI adapts its writing style based on the template you choose. Here are a few <strong>consulting proposal examples</strong> of what you can create:</p>
                 <div className="grid md:grid-cols-3 gap-6 text-center">
                     <div className="bg-slate-50 p-4 rounded-lg border border-slate-200">
-                        <h3 className="font-semibold text-slate-800">Strategic Plan</h3>
-                        <p className="text-sm text-slate-600 mt-1">A high-level proposal for a business strategy overhaul project.</p>
+                        <h3 className="font-semibold text-slate-800">Project-Based Plan</h3>
+                        <p className="text-sm text-slate-600 mt-1">A detailed proposal for a project with a fixed scope and timeline.</p>
                     </div>
                     <div className="bg-slate-50 p-4 rounded-lg border border-slate-200">
-                        <h3 className="font-semibold text-slate-800">Fractional CMO</h3>
-                        <p className="text-sm text-slate-600 mt-1">A growth-focused <strong>fractional cmo proposal template</strong> for marketing leadership.</p>
+                        <h3 className="font-semibold text-slate-800">Discovery Audit</h3>
+                        <p className="text-sm text-slate-600 mt-1">A concise proposal for a short-term audit to diagnose problems.</p>
                     </div>
                     <div className="bg-slate-50 p-4 rounded-lg border border-slate-200">
-                        <h3 className="font-semibold text-slate-800">Monthly Retainer</h3>
-                        <p className="text-sm text-slate-600 mt-1">A proposal for ongoing advisory services with a recurring monthly fee.</p>
+                        <h3 className="font-semibold text-slate-800">Retainer Renewal</h3>
+                        <p className="text-sm text-slate-600 mt-1">A proposal to continue an existing engagement, highlighting past wins.</p>
                     </div>
                 </div>
             </section>
