@@ -107,6 +107,16 @@ const LeadCaptureForm: React.FC<LeadCaptureFormProps> = ({ onSubmit, onSuccessCo
                 disabled={status === 'loading'}
             />
             {error && <p className="text-sm text-red-600">{error}</p>}
+
+            <div className="my-4 p-3 bg-slate-50 border border-slate-200 rounded-lg text-sm">
+                <h4 className="font-semibold text-slate-700 mb-2">What's Inside: 90-Day Plan</h4>
+                <ul className="space-y-1 text-slate-600">
+                    <li><strong>Month 1: Discovery &amp; Planning</strong> &ndash; We'll align on goals, audit current efforts, and build the strategic roadmap.</li>
+                    <li><strong>Month 2: Execution &amp; Implementation</strong> &ndash; We'll launch key initiatives and establish a rhythm of progress.</li>
+                    <li><strong>Month 3: Optimization &amp; Reporting</strong> &ndash; We'll analyze data, refine our approach, and report on key outcomes.</li>
+                </ul>
+            </div>
+            
             <div className="pt-2">
                 <Button 
                     type="submit" 
