@@ -3,6 +3,7 @@ import {
     Document, 
     Packer, 
     Paragraph, 
+    HeadingLevel, 
     TextRun, 
     AlignmentType,
     BorderStyle,
@@ -14,30 +15,20 @@ import {
 import saveAs from 'file-saver';
 import { GeneratedProposal } from '../types';
 
-const brandColorHex: Record<string, string> = {
-    indigo: '4F46E5',
-    slate: '475569',
-    green: '16A34A',
-    rose: 'E11D48',
-    amber: 'D97706',
-};
-
-const createSection = (title: string, children: (Paragraph | TextRun)[], color: string): Paragraph[] => {
-    const headingColor = brandColorHex[color] || brandColorHex.indigo;
-
+const createSection = (title: string, children: (Paragraph | TextRun)[], brandColor: string): Paragraph[] => {
     const heading = new Paragraph({
         children: [
             new TextRun({
                 text: title,
                 bold: true,
                 size: 28, // 14pt
-                color: headingColor,
+                color: brandColor.substring(1), // Remove # for docx
             }),
         ],
         spacing: { after: 200 },
         border: {
             bottom: {
-                color: headingColor,
+                color: brandColor.substring(1), // Remove # for docx
                 space: 1,
                 style: BorderStyle.SINGLE,
                 size: 6,
@@ -108,13 +99,7 @@ const createBulletedList = (items: string[]) => items.map(item => new Paragraph(
 }));
 
 
-export const exportToDocx = (
-    proposal: GeneratedProposal, 
-    clientName: string, 
-    executiveName: string, 
-    executiveRole: string,
-    brandColor: string
-) => {
+export const exportToDocx = (proposal: GeneratedProposal, clientName: string, executiveName: string, executiveRole: string, brandColor: string) => {
     const doc = new Document({
         sections: [{
             properties: {},
@@ -165,11 +150,11 @@ export const exportToDocx = (
                 }),
                 ...createSection("Terms & Conditions", createBulletedList(proposal.termsAndConditions), brandColor),
                 new Paragraph({
-                    children: [new TextRun({ text: "Agreement & Signature", bold: true, size: 28, color: brandColorHex[brandColor] })],
+                    children: [new TextRun({ text: "Agreement & Signature", bold: true, size: 28, color: brandColor.substring(1) })],
                     spacing: { before: 400, after: 300 },
                      border: {
                         bottom: {
-                            color: brandColorHex[brandColor],
+                            color: brandColor.substring(1),
                             space: 1,
                             style: BorderStyle.SINGLE,
                             size: 6,

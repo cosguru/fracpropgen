@@ -8,27 +8,19 @@ interface ProposalPreviewProps {
     brandColor: string;
 }
 
-const colorClasses: Record<string, { text: string; border: string }> = {
-    indigo: { text: 'text-indigo-600', border: 'border-indigo-600' },
-    slate: { text: 'text-slate-600', border: 'border-slate-600' },
-    green: { text: 'text-green-600', border: 'border-green-600' },
-    rose: { text: 'text-rose-600', border: 'border-rose-600' },
-    amber: { text: 'text-amber-600', border: 'border-amber-600' },
-};
-
-
-const Section: React.FC<{ title: string; children: React.ReactNode; brandColor: string }> = ({ title, children, brandColor }) => {
-    const colors = colorClasses[brandColor] || colorClasses.indigo;
-    
-    return (
-        <div className="mb-6 last:mb-0">
-            <h3 className={`text-lg font-bold font-display ${colors.text} mb-3 pb-2 border-b-2 ${colors.border}`}>{title}</h3>
-            <div className="prose prose-slate max-w-none text-slate-700">
-                {children}
-            </div>
+const Section: React.FC<{ title: string; children: React.ReactNode; brandColor: string; }> = ({ title, children, brandColor }) => (
+    <div className="mb-6 last:mb-0">
+        <h3 
+            className="text-lg font-bold font-display mb-3 pb-2 border-b"
+            style={{ color: brandColor, borderColor: brandColor }}
+        >
+            {title}
+        </h3>
+        <div className="prose prose-slate max-w-none text-slate-700">
+            {children}
         </div>
-    );
-};
+    </div>
+);
 
 const ProposalPreview: React.FC<ProposalPreviewProps> = ({ proposal, onAboutChange, brandColor }) => {
     const aboutTextareaRef = useRef<HTMLTextAreaElement>(null);

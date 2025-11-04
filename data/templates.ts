@@ -15,42 +15,6 @@ export const templates: ProposalTemplate[] = [
         },
     },
     {
-        id: 'project-based',
-        name: 'Project-Based Proposal',
-        description: 'A classic template for any project with a fixed scope and timeline.',
-        systemInstruction: 'You are an expert proposal writer for project-based consulting. Your proposals are highly structured, focusing on clear deliverables, concrete timelines, and specific outcomes. Your tone is direct, organized, and results-oriented.',
-        exampleData: {
-            executiveRole: 'Consultant',
-            projectGoal: 'To redesign the company website to improve user engagement and increase lead conversion by 30%.',
-            deliverables: 'Full website audit, UX/UI wireframes, High-fidelity mockups, Style guide, Final design handoff to developers',
-            price: '$15,000 fixed project fee',
-        },
-    },
-    {
-        id: 'discovery-audit',
-        name: 'Quick Audit / Discovery Project',
-        description: 'For short, initial engagements to diagnose problems and propose a larger solution.',
-        systemInstruction: 'You are an expert proposal writer for discovery and audit projects. Your proposals are diagnostic and insightful, focused on uncovering issues and providing a clear roadmap for a future, larger engagement. Your tone is analytical, expert, and value-driven.',
-        exampleData: {
-            executiveRole: 'Strategic Advisor',
-            projectGoal: 'Conduct a comprehensive audit of the current sales and marketing funnel to identify key areas for improvement.',
-            deliverables: 'Funnel performance report, Competitor analysis, Stakeholder interviews summary, High-level recommendations roadmap',
-            price: '$5,000 for the 2-week audit',
-        },
-    },
-     {
-        id: 'retainer-renewal',
-        name: 'Retainer Renewal Proposal',
-        description: 'A template to renew an existing contract by highlighting past successes.',
-        systemInstruction: 'You are an expert proposal writer specializing in retainer renewals. Your proposals are reflective and forward-looking, celebrating past wins and outlining a compelling vision for the continued partnership. Your tone is appreciative, confident, and strategic.',
-        exampleData: {
-            executiveRole: 'Fractional CMO',
-            projectGoal: 'To build on the 50% MQL growth achieved last quarter by expanding into two new marketing channels and launching a brand awareness campaign.',
-            deliverables: 'Summary of previous term accomplishments, Next-term strategic priorities, Channel expansion plan, Updated KPI targets',
-            price: '$8,000/month retainer (continued)',
-        },
-    },
-    {
         id: 'marketing-maverick',
         name: 'Marketing Maverick (CMO)',
         description: 'Focuses on growth, metrics, and customer acquisition.',
@@ -96,6 +60,30 @@ export const templates: ProposalTemplate[] = [
             projectGoal: 'Streamline core business processes to increase operational efficiency by 30%.',
             deliverables: 'Operational workflow audit, Process mapping and optimization plan, KPI dashboard implementation, Supply chain analysis',
             price: '$8,500/month retainer',
+        },
+    },
+    {
+        id: 'people-champion',
+        name: 'People Champion (CHRO)',
+        description: 'Centers on talent, culture, and organizational health.',
+        systemInstruction: 'You are an expert proposal writer for Fractional CHROs. Your proposals are people-centric and strategic, focusing on building strong company culture, attracting top talent, and enhancing employee engagement. Your tone is empathetic, insightful, and dedicated to aligning people strategy with business objectives.',
+        exampleData: {
+            executiveRole: 'Fractional CHRO',
+            projectGoal: 'Reduce employee turnover by 25% and improve employee net promoter score (eNPS).',
+            deliverables: 'Company culture assessment, Employee engagement survey and action plan, Performance management system redesign, Leadership training program',
+            price: '$7,000/month retainer',
+        },
+    },
+    {
+        id: 'sales-strategist',
+        name: 'Sales Strategist (CSO)',
+        description: 'Highlights revenue growth, sales process, and team performance.',
+        systemInstruction: 'You are an expert proposal writer for Fractional Sales Leaders. Your proposals are dynamic and results-driven, focusing on accelerating revenue growth, optimizing the sales process, and building high-performance sales teams. Your tone is persuasive, confident, and relentlessly focused on hitting targets and exceeding market expectations.',
+        exampleData: {
+            executiveRole: 'Fractional CSO',
+            projectGoal: 'Increase new sales revenue by 40% in the next two quarters.',
+            deliverables: 'Sales process audit and redesign, CRM optimization plan, Sales playbook creation, Sales team coaching and training',
+            price: '$9,500/month retainer',
         },
     }
 ];

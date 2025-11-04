@@ -1,28 +1,20 @@
 
 import React, { useState, useCallback, useEffect } from 'react';
-import { ProposalFormInput, GeneratedProposal, GeneratedEmail } from './types';
+import { ProposalFormInput, GeneratedProposal } from './types';
 import ProposalForm from './components/ProposalForm';
 import ProposalPreview from './components/ProposalPreview';
-import { generateProposalContent, generateCompanionEmail } from './services/geminiService';
+import { generateProposalContent } from './services/geminiService';
 import { exportToDocx } from './services/wordService';
 import { sendLeadToSysteme } from './services/systemeService';
 import ProgressBar from './components/ui/ProgressBar';
 import Button from './components/ui/Button';
 import Modal from './components/ui/Modal';
 import LeadCaptureForm from './components/LeadCaptureForm';
-import EmailPreviewModal from './components/EmailPreviewModal';
 import { templates } from './data/templates';
 
 const DownloadIcon = () => (
     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
       <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-    </svg>
-);
-
-const EmailIcon = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-        <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
-        <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
     </svg>
 );
 
@@ -51,18 +43,18 @@ const StaticContent = () => (
             <section id="examples" className="mb-12 scroll-mt-20">
                 <h2 className="text-2xl font-bold font-display text-slate-900 mb-4">Consulting Proposal Examples</h2>
                 <p className="text-slate-600 mb-6">Our AI adapts its writing style based on the template you choose. Here are a few <strong>consulting proposal examples</strong> of what you can create:</p>
-                <div className="grid md:grid-cols-3 gap-6 text-left">
+                <div className="grid md:grid-cols-3 gap-6 text-center">
                     <div className="bg-slate-50 p-4 rounded-lg border border-slate-200">
-                        <h3 className="font-semibold text-slate-800">Project-Based Proposal</h3>
-                        <p className="text-sm text-slate-600 mt-1">A classic template for any project with a fixed scope, clear deliverables, and a defined timeline.</p>
+                        <h3 className="font-semibold text-slate-800">Strategic Plan</h3>
+                        <p className="text-sm text-slate-600 mt-1">A high-level proposal for a business strategy overhaul project.</p>
                     </div>
                     <div className="bg-slate-50 p-4 rounded-lg border border-slate-200">
-                        <h3 className="font-semibold text-slate-800">Discovery Audit</h3>
-                        <p className="text-sm text-slate-600 mt-1">Perfect for short, initial engagements designed to diagnose problems and propose a larger solution.</p>
+                        <h3 className="font-semibold text-slate-800">Fractional CMO</h3>
+                        <p className="text-sm text-slate-600 mt-1">A growth-focused <strong>fractional cmo proposal template</strong> for marketing leadership.</p>
                     </div>
                     <div className="bg-slate-50 p-4 rounded-lg border border-slate-200">
-                        <h3 className="font-semibold text-slate-800">Retainer Renewal</h3>
-                        <p className="text-sm text-slate-600 mt-1">A specialized template to help you renew existing contracts by highlighting past successes and outlining future goals.</p>
+                        <h3 className="font-semibold text-slate-800">Monthly Retainer</h3>
+                        <p className="text-sm text-slate-600 mt-1">A proposal for ongoing advisory services with a recurring monthly fee.</p>
                     </div>
                 </div>
             </section>
@@ -131,7 +123,7 @@ const App: React.FC = () => {
         timeline: '3-Month Engagement',
         executiveAbout: '',
         templateId: defaultTemplate.id,
-        brandColor: 'indigo',
+        brandColor: '#4f46e5', // Default: Indigo
     });
 
     const [generatedProposal, setGeneratedProposal] = useState<GeneratedProposal | null>(null);
@@ -139,11 +131,6 @@ const App: React.FC = () => {
     const [progress, setProgress] = useState<number>(0);
     const [error, setError] = useState<string | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    
-    const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);
-    const [generatedEmail, setGeneratedEmail] = useState<GeneratedEmail | null>(null);
-    const [isEmailLoading, setIsEmailLoading] = useState(false);
-
 
     useEffect(() => {
         let interval: NodeJS.Timeout | undefined;
@@ -189,15 +176,15 @@ const App: React.FC = () => {
             }));
         }
     }, []);
+    
+    const handleBrandColorChange = useCallback((color: string) => {
+        setFormInput(prev => ({ ...prev, brandColor: color }));
+    }, []);
 
     const handleAboutChange = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
         const newAboutText = e.target.value;
         setGeneratedProposal(prev => (prev ? { ...prev, about: newAboutText } : null));
         setFormInput(prev => ({ ...prev, executiveAbout: newAboutText }));
-    }, []);
-
-    const handleBrandColorChange = useCallback((color: string) => {
-        setFormInput(prev => ({ ...prev, brandColor: color }));
     }, []);
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -226,21 +213,6 @@ const App: React.FC = () => {
     const handleDownloadClick = () => {
         if (generatedProposal) {
             setIsModalOpen(true);
-        }
-    };
-
-    const handleGenerateEmailClick = async () => {
-        if (!generatedProposal) return;
-        setIsEmailLoading(true);
-        try {
-            const email = await generateCompanionEmail(generatedProposal, formInput.clientName, formInput.executiveName);
-            setGeneratedEmail(email);
-            setIsEmailModalOpen(true);
-        } catch (error) {
-            console.error("Failed to generate email", error);
-            // Optionally set an error state to show in the UI
-        } finally {
-            setIsEmailLoading(false);
         }
     };
 
@@ -294,31 +266,23 @@ const App: React.FC = () => {
                                                 brandColor={formInput.brandColor}
                                             />
                                         </div>
-                                        <div className="mt-auto pt-6 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-center gap-4">
-                                            <Button
-                                                onClick={handleGenerateEmailClick}
-                                                icon={<EmailIcon />}
-                                                isLoading={isEmailLoading}
-                                                className="w-full sm:w-auto bg-slate-600 hover:bg-slate-700 focus:ring-slate-500"
-                                            >
-                                                Generate Email to Client
-                                            </Button>
-                                            <Button
+                                        <div className="mt-auto pt-6 border-t border-slate-200 flex flex-col items-center">
+                                           <Button
                                                 onClick={handleDownloadClick}
                                                 icon={<DownloadIcon />}
                                                 className="w-full sm:w-auto"
                                             >
                                                 Download as Word Doc
                                             </Button>
+                                            <a
+                                                href="https://forms.gle/YFxavJGmj66xBCcaA"
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="mt-4 inline-block text-sm text-slate-500 hover:text-slate-700 hover:underline transition-colors"
+                                            >
+                                                Provide Feedback
+                                            </a>
                                         </div>
-                                         <a
-                                            href="https://forms.gle/YFxavJGmj66xBCcaA"
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="mt-4 text-center text-sm text-slate-500 hover:text-slate-700 hover:underline transition-colors"
-                                        >
-                                            Provide Feedback
-                                        </a>
                                     </div>
                                 ) : (
                                     <div className="flex-grow flex flex-col items-center justify-center text-center text-slate-500 bg-slate-50 rounded-lg">
@@ -341,11 +305,6 @@ const App: React.FC = () => {
                     onSuccessComplete={handleDownloadAndClose}
                 />
             </Modal>
-             <EmailPreviewModal 
-                isOpen={isEmailModalOpen} 
-                onClose={() => setIsEmailModalOpen(false)}
-                email={generatedEmail}
-            />
         </>
     );
 };
