@@ -5,18 +5,32 @@ import { GeneratedProposal } from '../types';
 interface ProposalPreviewProps {
     proposal: GeneratedProposal;
     onAboutChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+    brandColor: string;
 }
 
-const Section: React.FC<{ title: string; children: React.ReactNode }> = ({ title, children }) => (
-    <div className="mb-6 last:mb-0">
-        <h3 className="text-lg font-bold font-display text-slate-900 mb-3 pb-2 border-b border-slate-200">{title}</h3>
-        <div className="prose prose-slate max-w-none text-slate-700">
-            {children}
-        </div>
-    </div>
-);
+const colorClasses: Record<string, { text: string; border: string }> = {
+    indigo: { text: 'text-indigo-600', border: 'border-indigo-600' },
+    slate: { text: 'text-slate-600', border: 'border-slate-600' },
+    green: { text: 'text-green-600', border: 'border-green-600' },
+    rose: { text: 'text-rose-600', border: 'border-rose-600' },
+    amber: { text: 'text-amber-600', border: 'border-amber-600' },
+};
 
-const ProposalPreview: React.FC<ProposalPreviewProps> = ({ proposal, onAboutChange }) => {
+
+const Section: React.FC<{ title: string; children: React.ReactNode; brandColor: string }> = ({ title, children, brandColor }) => {
+    const colors = colorClasses[brandColor] || colorClasses.indigo;
+    
+    return (
+        <div className="mb-6 last:mb-0">
+            <h3 className={`text-lg font-bold font-display ${colors.text} mb-3 pb-2 border-b-2 ${colors.border}`}>{title}</h3>
+            <div className="prose prose-slate max-w-none text-slate-700">
+                {children}
+            </div>
+        </div>
+    );
+};
+
+const ProposalPreview: React.FC<ProposalPreviewProps> = ({ proposal, onAboutChange, brandColor }) => {
     const aboutTextareaRef = useRef<HTMLTextAreaElement>(null);
 
     const adjustTextareaHeight = (element: HTMLTextAreaElement | null) => {
@@ -39,15 +53,15 @@ const ProposalPreview: React.FC<ProposalPreviewProps> = ({ proposal, onAboutChan
         <div className="prose prose-slate max-w-none">
             <h2 className="text-3xl font-bold font-display text-center text-slate-900 mb-8">{proposal.title}</h2>
             
-            <Section title="Executive Summary">
+            <Section title="Executive Summary" brandColor={brandColor}>
                 <p>{proposal.executiveSummary}</p>
             </Section>
             
-            <Section title="Understanding the Challenge">
+            <Section title="Understanding the Challenge" brandColor={brandColor}>
                 <p>{proposal.problemStatement}</p>
             </Section>
 
-            <Section title="Proposed Solution & Scope of Work">
+            <Section title="Proposed Solution & Scope of Work" brandColor={brandColor}>
                 <ul>
                     {proposal.proposedSolution.map((item, index) => (
                         <li key={index}>{item}</li>
@@ -55,7 +69,7 @@ const ProposalPreview: React.FC<ProposalPreviewProps> = ({ proposal, onAboutChan
                 </ul>
             </Section>
 
-            <Section title="Measuring Success">
+            <Section title="Measuring Success" brandColor={brandColor}>
                 <ul>
                     {proposal.measuringSuccess.map((item, index) => (
                         <li key={index}>{item}</li>
@@ -63,7 +77,7 @@ const ProposalPreview: React.FC<ProposalPreviewProps> = ({ proposal, onAboutChan
                 </ul>
             </Section>
 
-            <Section title="Exclusions (Out of Scope)">
+            <Section title="Exclusions (Out of Scope)" brandColor={brandColor}>
                 <ul>
                     {proposal.exclusions.map((item, index) => (
                         <li key={index}>{item}</li>
@@ -71,7 +85,7 @@ const ProposalPreview: React.FC<ProposalPreviewProps> = ({ proposal, onAboutChan
                 </ul>
             </Section>
 
-            <Section title="90-Day Plan">
+            <Section title="90-Day Plan" brandColor={brandColor}>
                  <ul>
                     {proposal.ninetyDayPlan.map((item, index) => (
                         <li key={index}>{item}</li>
@@ -79,15 +93,15 @@ const ProposalPreview: React.FC<ProposalPreviewProps> = ({ proposal, onAboutChan
                 </ul>
             </Section>
 
-            <Section title="Timeline">
+            <Section title="Timeline" brandColor={brandColor}>
                 <p>{proposal.timeline}</p>
             </Section>
 
-            <Section title="Investment">
+            <Section title="Investment" brandColor={brandColor}>
                 <p>{proposal.investment}</p>
             </Section>
             
-            <Section title="Client Responsibilities">
+            <Section title="Client Responsibilities" brandColor={brandColor}>
                 <ul>
                     {proposal.clientResponsibilities.map((item, index) => (
                         <li key={index}>{item}</li>
@@ -95,7 +109,7 @@ const ProposalPreview: React.FC<ProposalPreviewProps> = ({ proposal, onAboutChan
                 </ul>
             </Section>
 
-            <Section title="About">
+            <Section title="About" brandColor={brandColor}>
                 <textarea
                     ref={aboutTextareaRef}
                     value={proposal.about}
@@ -105,7 +119,7 @@ const ProposalPreview: React.FC<ProposalPreviewProps> = ({ proposal, onAboutChan
                 />
             </Section>
 
-            <Section title="Next Steps">
+            <Section title="Next Steps" brandColor={brandColor}>
                 <p>{proposal.nextSteps}</p>
             </Section>
         </div>

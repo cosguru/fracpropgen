@@ -1,32 +1,67 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { ProposalFormInput } from '../types';
 import Input from './ui/Input';
 import Textarea from './ui/Textarea';
 import Button from './ui/Button';
+import RadioCard from './ui/RadioCard';
+import SuggestionPopover from './ui/SuggestionPopover';
+import { generateSuggestions } from '../services/geminiService';
 import { templates } from '../data/templates';
 
 interface ProposalFormProps {
     input: ProposalFormInput;
     onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
     onTemplateChange: (templateId: string) => void;
+    onBrandColorChange: (color: string) => void;
     onSubmit: (e: React.FormEvent) => void;
     isLoading: boolean;
 }
 
 const SparklesIcon = () => (
     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-        <path d="M10 3a1 1 0 011 1v1h1a1 1 0 110 2h-1v1a1 1 0 11-2 0V7H8a1 1 0 010-2h1V4a1 1 0 011-1zM5 9a1 1 0 00-1 1v1H3a1 1 0 100 2h1v1a1 1 0 102 0v-1h1a1 1 0 100-2H6v-1a1 1 0 00-1-1zm11-4a1 1 0 10-2 0v1h-1a1 1 0 100 2h1v1a1 1 0 102 0V7h1a1 1 0 100-2h-1V5z" />
+        <path fillRule="evenodd" d="M5 2a1 1 0 00-1 1v1H3a1 1 0 000 2h1v1a1 1 0 002 0V6h1a1 1 0 100-2H6V3a1 1 0 00-1-1zm11 1a1 1 0 00-1 1v1h-1a1 1 0 100 2h1v1a1 1 0 102 0V6h1a1 1 0 100-2h-1V3a1 1 0 00-1-1zM5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414L11.414 12l3.293 3.293a1 1 0 01-1.414 1.414L10 13.414l-3.293 3.293a1 1 0 01-1.414-1.414L8.586 12 5.293 8.707a1 1 0 010-1.414z" clipRule="evenodd" />
     </svg>
 )
 
-const ProposalForm: React.FC<ProposalFormProps> = ({ input, onChange, onTemplateChange, onSubmit, isLoading }) => {
+const brandColors = [
+    { name: 'indigo', hex: '#6366F1' },
+    { name: 'slate', hex: '#64748B' },
+    { name: 'green', hex: '#22C55E' },
+    { name: 'rose', hex: '#F43F5E' },
+    { name: 'amber', hex: '#F59E0B' },
+];
+
+const ProposalForm: React.FC<ProposalFormProps> = ({ input, onChange, onTemplateChange, onBrandColorChange, onSubmit, isLoading }) => {
     const selectedTemplate = templates.find(t => t.id === input.templateId) || templates[0];
+    const [suggestions, setSuggestions] = useState<{ for: string; values: string[] } | null>(null);
+    const [isSuggestionLoading, setIsSuggestionLoading] = useState<string | null>(null);
 
     const handleTemplateSelectionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         onTemplateChange(e.target.value);
     };
+
+    const handleSuggestionRequest = async (fieldName: 'projectGoal' | 'deliverables', currentText: string) => {
+        if (!currentText.trim()) return;
+        setIsSuggestionLoading(fieldName);
+        setSuggestions(null);
+        try {
+            const result = await generateSuggestions(currentText);
+            setSuggestions({ for: fieldName, values: result });
+        } catch (error) {
+            console.error(`Failed to get suggestions for ${fieldName}`, error);
+        } finally {
+            setIsSuggestionLoading(null);
+        }
+    };
     
+    const handleSuggestionSelect = (fieldName: string, value: string) => {
+        onChange({
+            target: { name: fieldName, value }
+        } as React.ChangeEvent<HTMLTextAreaElement>);
+        setSuggestions(null);
+    };
+
     return (
         <form onSubmit={onSubmit} className="bg-white p-6 sm:p-8 rounded-xl shadow-lg border border-slate-100 space-y-6">
             <div>
@@ -59,7 +94,22 @@ const ProposalForm: React.FC<ProposalFormProps> = ({ input, onChange, onTemplate
             </div>
 
             <div className="space-y-1 pt-4 border-t border-slate-200">
-                <h2 className="text-xl font-bold font-display text-slate-800">2. Proposal Details</h2>
+                <h2 className="text-xl font-bold font-display text-slate-800">2. Brand Customization</h2>
+                <p className="text-sm text-slate-500">Select an accent color for headings in the proposal.</p>
+            </div>
+
+            <div className="grid grid-cols-5 gap-3">
+                {brandColors.map(color => (
+                     <RadioCard key={color.name} name="brandColor" id={`color-${color.name}`} value={color.name} checked={input.brandColor === color.name} onChange={() => onBrandColorChange(color.name)}>
+                        <div className="flex items-center justify-center">
+                            <div className="w-8 h-8 rounded-full" style={{ backgroundColor: color.hex }}></div>
+                        </div>
+                    </RadioCard>
+                ))}
+            </div>
+
+            <div className="space-y-1 pt-4 border-t border-slate-200">
+                <h2 className="text-xl font-bold font-display text-slate-800">3. Proposal Details</h2>
                 <p className="text-sm text-slate-500">Provide the key information below.</p>
             </div>
             
@@ -84,22 +134,44 @@ const ProposalForm: React.FC<ProposalFormProps> = ({ input, onChange, onTemplate
                 onChange={onChange}
                 placeholder="e.g., Innovate Corp"
             />
-            <Textarea 
-                label="Project Goal"
-                name="projectGoal"
-                value={input.projectGoal}
-                onChange={onChange}
-                placeholder="What is the primary objective for the client?"
-                rows={3}
-            />
-             <Textarea 
-                label="Key Deliverables"
-                name="deliverables"
-                value={input.deliverables}
-                onChange={onChange}
-                placeholder="List main deliverables, separated by commas"
-                rows={3}
-            />
+            <div className="relative">
+                <Textarea 
+                    label="Project Goal"
+                    name="projectGoal"
+                    value={input.projectGoal}
+                    onChange={onChange}
+                    placeholder="What is the primary objective for the client?"
+                    rows={3}
+                    onSuggestionClick={() => handleSuggestionRequest('projectGoal', input.projectGoal)}
+                    isSuggestionLoading={isSuggestionLoading === 'projectGoal'}
+                />
+                {suggestions?.for === 'projectGoal' && (
+                    <SuggestionPopover
+                        suggestions={suggestions.values}
+                        onSelect={(value) => handleSuggestionSelect('projectGoal', value)}
+                        onClose={() => setSuggestions(null)}
+                    />
+                )}
+            </div>
+             <div className="relative">
+                <Textarea 
+                    label="Key Deliverables"
+                    name="deliverables"
+                    value={input.deliverables}
+                    onChange={onChange}
+                    placeholder="List main deliverables, separated by commas"
+                    rows={3}
+                    onSuggestionClick={() => handleSuggestionRequest('deliverables', input.deliverables)}
+                    isSuggestionLoading={isSuggestionLoading === 'deliverables'}
+                />
+                 {suggestions?.for === 'deliverables' && (
+                    <SuggestionPopover
+                        suggestions={suggestions.values}
+                        onSelect={(value) => handleSuggestionSelect('deliverables', value)}
+                        onClose={() => setSuggestions(null)}
+                    />
+                )}
+            </div>
             <Input 
                 label="Timeline" 
                 name="timeline"

@@ -3,7 +3,6 @@ import {
     Document, 
     Packer, 
     Paragraph, 
-    HeadingLevel, 
     TextRun, 
     AlignmentType,
     BorderStyle,
@@ -15,19 +14,30 @@ import {
 import saveAs from 'file-saver';
 import { GeneratedProposal } from '../types';
 
-const createSection = (title: string, children: (Paragraph | TextRun)[]): Paragraph[] => {
+const brandColorHex: Record<string, string> = {
+    indigo: '4F46E5',
+    slate: '475569',
+    green: '16A34A',
+    rose: 'E11D48',
+    amber: 'D97706',
+};
+
+const createSection = (title: string, children: (Paragraph | TextRun)[], color: string): Paragraph[] => {
+    const headingColor = brandColorHex[color] || brandColorHex.indigo;
+
     const heading = new Paragraph({
         children: [
             new TextRun({
                 text: title,
                 bold: true,
                 size: 28, // 14pt
+                color: headingColor,
             }),
         ],
         spacing: { after: 200 },
         border: {
             bottom: {
-                color: "auto",
+                color: headingColor,
                 space: 1,
                 style: BorderStyle.SINGLE,
                 size: 6,
@@ -98,7 +108,13 @@ const createBulletedList = (items: string[]) => items.map(item => new Paragraph(
 }));
 
 
-export const exportToDocx = (proposal: GeneratedProposal, clientName: string, executiveName: string, executiveRole: string) => {
+export const exportToDocx = (
+    proposal: GeneratedProposal, 
+    clientName: string, 
+    executiveName: string, 
+    executiveRole: string,
+    brandColor: string
+) => {
     const doc = new Document({
         sections: [{
             properties: {},
@@ -125,17 +141,17 @@ export const exportToDocx = (proposal: GeneratedProposal, clientName: string, ex
                     spacing: { after: 800 },
                 }),
 
-                ...createSection("Executive Summary", [new TextRun(proposal.executiveSummary)]),
-                ...createSection("Understanding the Challenge", [new TextRun(proposal.problemStatement)]),
-                ...createSection("Proposed Solution & Scope of Work", createBulletedList(proposal.proposedSolution)),
-                ...createSection("Measuring Success", createBulletedList(proposal.measuringSuccess)),
-                ...createSection("Exclusions (Out of Scope)", createBulletedList(proposal.exclusions)),
-                ...createSection("90-Day Plan", createBulletedList(proposal.ninetyDayPlan)),
-                ...createSection("Timeline", [new TextRun(proposal.timeline)]),
-                ...createSection("Investment", [new TextRun(proposal.investment)]),
-                ...createSection("Client Responsibilities", createBulletedList(proposal.clientResponsibilities)),
-                ...createSection("About", [new TextRun(proposal.about)]),
-                ...createSection("Next Steps", [new TextRun(proposal.nextSteps)]),
+                ...createSection("Executive Summary", [new TextRun(proposal.executiveSummary)], brandColor),
+                ...createSection("Understanding the Challenge", [new TextRun(proposal.problemStatement)], brandColor),
+                ...createSection("Proposed Solution & Scope of Work", createBulletedList(proposal.proposedSolution), brandColor),
+                ...createSection("Measuring Success", createBulletedList(proposal.measuringSuccess), brandColor),
+                ...createSection("Exclusions (Out of Scope)", createBulletedList(proposal.exclusions), brandColor),
+                ...createSection("90-Day Plan", createBulletedList(proposal.ninetyDayPlan), brandColor),
+                ...createSection("Timeline", [new TextRun(proposal.timeline)], brandColor),
+                ...createSection("Investment", [new TextRun(proposal.investment)], brandColor),
+                ...createSection("Client Responsibilities", createBulletedList(proposal.clientResponsibilities), brandColor),
+                ...createSection("About", [new TextRun(proposal.about)], brandColor),
+                ...createSection("Next Steps", [new TextRun(proposal.nextSteps)], brandColor),
                 new Paragraph({
                     children: [
                         new TextRun({
@@ -147,13 +163,13 @@ export const exportToDocx = (proposal: GeneratedProposal, clientName: string, ex
                     ],
                     spacing: { before: 400, after: 200 },
                 }),
-                ...createSection("Terms & Conditions", createBulletedList(proposal.termsAndConditions)),
+                ...createSection("Terms & Conditions", createBulletedList(proposal.termsAndConditions), brandColor),
                 new Paragraph({
-                    children: [new TextRun({ text: "Agreement & Signature", bold: true, size: 28 })],
+                    children: [new TextRun({ text: "Agreement & Signature", bold: true, size: 28, color: brandColorHex[brandColor] })],
                     spacing: { before: 400, after: 300 },
                      border: {
                         bottom: {
-                            color: "auto",
+                            color: brandColorHex[brandColor],
                             space: 1,
                             style: BorderStyle.SINGLE,
                             size: 6,

@@ -22,6 +22,7 @@ export interface ProposalFormInput {
   price: string;
   executiveAbout: string;
   templateId: string;
+  brandColor: string;
 }
 
 export interface GeneratedProposal {
@@ -38,4 +39,9 @@ export interface GeneratedProposal {
   measuringSuccess: string[];
   clientResponsibilities: string[];
   exclusions: string[];
+}
+
+export interface GeneratedEmail {
+    subject: string;
+    body: string;
 }
