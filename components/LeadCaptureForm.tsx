@@ -5,7 +5,7 @@ import Button from './ui/Button';
 import Spinner from './ui/Spinner';
 
 interface LeadCaptureFormProps {
-    onSubmit: (name: string, email: string) => Promise<boolean>;
+    onSubmit: (firstName: string, lastName: string, email: string) => Promise<boolean>;
     onSuccessComplete: () => void;
 }
 
@@ -28,7 +28,8 @@ const validateEmail = (email: string) => {
 
 
 const LeadCaptureForm: React.FC<LeadCaptureFormProps> = ({ onSubmit, onSuccessComplete }) => {
-    const [name, setName] = useState('');
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
     const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
     const [error, setError] = useState('');
@@ -48,8 +49,13 @@ const LeadCaptureForm: React.FC<LeadCaptureFormProps> = ({ onSubmit, onSuccessCo
         e.preventDefault();
         setError('');
 
-        if (!name.trim()) {
-            setError('Please enter your name.');
+        if (!firstName.trim()) {
+            setError('Please enter your first name.');
+            return;
+        }
+        
+        if (!lastName.trim()) {
+            setError('Please enter your last name.');
             return;
         }
 
@@ -60,7 +66,7 @@ const LeadCaptureForm: React.FC<LeadCaptureFormProps> = ({ onSubmit, onSuccessCo
         
         setStatus('loading');
         
-        const success = await onSubmit(name, email);
+        const success = await onSubmit(firstName, lastName, email);
 
         if (success) {
             setStatus('success');
@@ -83,19 +89,32 @@ const LeadCaptureForm: React.FC<LeadCaptureFormProps> = ({ onSubmit, onSuccessCo
     return (
         <form onSubmit={handleSubmit} className="space-y-4">
             <p className="text-sm text-slate-600 mb-4">
-                Enter your name and email to download the proposal as a Word document.
+                Enter your details to download the proposal as a Word document.
             </p>
-            <Input
-                label="Name"
-                name="name"
-                type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder="e.g., Jane Doe"
-                required
-                aria-required="true"
-                disabled={status === 'loading'}
-            />
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                 <Input
+                    label="First Name"
+                    name="firstName"
+                    type="text"
+                    value={firstName}
+                    onChange={(e) => setFirstName(e.target.value)}
+                    placeholder="e.g., Jane"
+                    required
+                    aria-required="true"
+                    disabled={status === 'loading'}
+                />
+                <Input
+                    label="Last Name"
+                    name="lastName"
+                    type="text"
+                    value={lastName}
+                    onChange={(e) => setLastName(e.target.value)}
+                    placeholder="e.g., Doe"
+                    required
+                    aria-required="true"
+                    disabled={status === 'loading'}
+                />
+            </div>
             <Input
                 label="Email"
                 name="email"

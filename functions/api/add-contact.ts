@@ -1,9 +1,11 @@
+
 interface Env {
     SYSTEME_API_KEY: string;
 }
 
 interface RequestBody {
-    name: string;
+    firstName: string;
+    lastName: string;
     email: string;
     tags?: number[];
 }
@@ -11,7 +13,7 @@ interface RequestBody {
 // Cloudflare Pages function to add a contact to Systeme.io
 export const onRequestPost = async (context: { request: Request; env: Env }): Promise<Response> => {
     try {
-        const { name, email, tags }: RequestBody = await context.request.json();
+        const { firstName, lastName, email, tags }: RequestBody = await context.request.json();
         const apiKey = context.env.SYSTEME_API_KEY;
 
         if (!apiKey) {
@@ -19,12 +21,9 @@ export const onRequestPost = async (context: { request: Request; env: Env }): Pr
             return new Response(JSON.stringify({ error: 'Server configuration error.' }), { status: 500 });
         }
 
-        if (!name || !email) {
-            return new Response(JSON.stringify({ error: 'Name and email are required.' }), { status: 400 });
+        if (!firstName || !lastName || !email) {
+            return new Response(JSON.stringify({ error: 'First name, last name, and email are required.' }), { status: 400 });
         }
-
-        const [firstName, ...lastNameParts] = name.split(' ');
-        const lastName = lastNameParts.join(' ');
 
         // Step 1: Create/Update the contact first.
         const contactPayload = {

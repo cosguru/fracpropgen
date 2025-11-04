@@ -29,7 +29,7 @@
  * ===================================================================
  */
 
-export const sendLeadToSysteme = async (name: string, email: string, tags?: number[]): Promise<boolean> => {
+export const sendLeadToSysteme = async (firstName: string, lastName: string, email: string, tags?: number[]): Promise<boolean> => {
     try {
         // This fetch call goes to our own Cloudflare Function, not directly to Systeme.io.
         // The function is located at /functions/api/add-contact.ts
@@ -38,7 +38,7 @@ export const sendLeadToSysteme = async (name: string, email: string, tags?: numb
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ name, email, tags }),
+            body: JSON.stringify({ firstName, lastName, email, tags }),
         });
 
         if (!response.ok) {

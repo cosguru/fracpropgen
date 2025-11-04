@@ -216,8 +216,8 @@ const App: React.FC = () => {
         }
     };
 
-    const handleLeadSubmission = async (name: string, email: string) => {
-        return await sendLeadToSysteme(name, email, [SYSTEME_TAG_ID]);
+    const handleLeadSubmission = async (firstName: string, lastName: string, email: string) => {
+        return await sendLeadToSysteme(firstName, lastName, email, [SYSTEME_TAG_ID]);
     };
 
     const handleDownloadAndClose = () => {
