@@ -1,8 +1,9 @@
+
 import React, { useState, useCallback, useEffect } from 'react';
-import { ProposalFormInput, GeneratedProposal, GeneratedEmail } from './types';
+import { ProposalFormInput, GeneratedProposal } from './types';
 import ProposalForm from './components/ProposalForm';
 import ProposalPreview from './components/ProposalPreview';
-import { generateProposalContent, generateCompanionEmail } from './services/geminiService';
+import { generateProposalContent } from './services/geminiService';
 import { exportToDocx } from './services/wordService';
 import { sendLeadToSysteme } from './services/systemeService';
 import ProgressBar from './components/ui/ProgressBar';
@@ -10,7 +11,6 @@ import Button from './components/ui/Button';
 import Modal from './components/ui/Modal';
 import LeadCaptureForm from './components/LeadCaptureForm';
 import { templates } from './data/templates';
-import EmailPreviewModal from './components/EmailPreviewModal';
 
 const DownloadIcon = () => (
     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -21,12 +21,6 @@ const DownloadIcon = () => (
 const EmptyStateIcon = () => (
     <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 text-slate-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1}>
       <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-    </svg>
-);
-
-const EmailIcon = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
     </svg>
 );
 
@@ -51,15 +45,15 @@ const StaticContent = () => (
                 <p className="text-slate-600 mb-6">Our AI adapts its writing style based on the template you choose. Here are a few <strong>consulting proposal examples</strong> of what you can create:</p>
                 <div className="grid md:grid-cols-3 gap-6 text-center">
                     <div className="bg-slate-50 p-4 rounded-lg border border-slate-200">
-                        <h3 className="font-semibold text-slate-800">Project-Based Proposal</h3>
-                        <p className="text-sm text-slate-600 mt-1">For projects with a clear scope, start, and end date.</p>
+                        <h3 className="font-semibold text-slate-800">Strategic Plan</h3>
+                        <p className="text-sm text-slate-600 mt-1">A high-level proposal for a business strategy overhaul project.</p>
                     </div>
                     <div className="bg-slate-50 p-4 rounded-lg border border-slate-200">
-                        <h3 className="font-semibold text-slate-800">Discovery Audit</h3>
-                        <p className="text-sm text-slate-600 mt-1">A short, focused proposal for an initial diagnostic engagement.</p>
+                        <h3 className="font-semibold text-slate-800">Fractional CMO</h3>
+                        <p className="text-sm text-slate-600 mt-1">A growth-focused <strong>fractional cmo proposal template</strong> for marketing leadership.</p>
                     </div>
                     <div className="bg-slate-50 p-4 rounded-lg border border-slate-200">
-                        <h3 className="font-semibold text-slate-800">Retainer Renewal</h3>
+                        <h3 className="font-semibold text-slate-800">Monthly Retainer</h3>
                         <p className="text-sm text-slate-600 mt-1">A proposal for ongoing advisory services with a recurring monthly fee.</p>
                     </div>
                 </div>
@@ -136,11 +130,7 @@ const App: React.FC = () => {
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [progress, setProgress] = useState<number>(0);
     const [error, setError] = useState<string | null>(null);
-    const [isLeadModalOpen, setIsLeadModalOpen] = useState(false);
-    const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);
-    const [generatedEmail, setGeneratedEmail] = useState<GeneratedEmail | null>(null);
-    const [isGeneratingEmail, setIsGeneratingEmail] = useState<boolean>(false);
-
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     useEffect(() => {
         let interval: NodeJS.Timeout | undefined;
@@ -222,22 +212,7 @@ const App: React.FC = () => {
     
     const handleDownloadClick = () => {
         if (generatedProposal) {
-            setIsLeadModalOpen(true);
-        }
-    };
-    
-    const handleGenerateEmail = async () => {
-        if (!generatedProposal) return;
-        setIsGeneratingEmail(true);
-        try {
-            const email = await generateCompanionEmail(generatedProposal, formInput.clientName);
-            setGeneratedEmail(email);
-            setIsEmailModalOpen(true);
-        } catch (err) {
-            console.error("Failed to generate email:", err);
-            // Optionally set an error state to show in the UI
-        } finally {
-            setIsGeneratingEmail(false);
+            setIsModalOpen(true);
         }
     };
 
@@ -249,7 +224,7 @@ const App: React.FC = () => {
         if (generatedProposal) {
             exportToDocx(generatedProposal, formInput.clientName, formInput.executiveName, formInput.executiveRole, formInput.brandColor);
         }
-        setIsLeadModalOpen(false);
+        setIsModalOpen(false);
     }
 
 
@@ -292,22 +267,13 @@ const App: React.FC = () => {
                                             />
                                         </div>
                                         <div className="mt-auto pt-6 border-t border-slate-200 flex flex-col items-center">
-                                           <div className="flex flex-col sm:flex-row gap-4">
-                                                <Button
-                                                    onClick={handleGenerateEmail}
-                                                    icon={<EmailIcon />}
-                                                    isLoading={isGeneratingEmail}
-                                                    className="bg-gradient-to-r from-slate-500 to-slate-600 hover:from-slate-600 hover:to-slate-700"
-                                                >
-                                                    {isGeneratingEmail ? 'Generating...' : 'Generate Email to Client'}
-                                                </Button>
-                                                <Button
-                                                    onClick={handleDownloadClick}
-                                                    icon={<DownloadIcon />}
-                                                >
-                                                    Download as Word Doc
-                                                </Button>
-                                           </div>
+                                           <Button
+                                                onClick={handleDownloadClick}
+                                                icon={<DownloadIcon />}
+                                                className="w-full sm:w-auto"
+                                            >
+                                                Download as Word Doc
+                                            </Button>
                                             <a
                                                 href="https://forms.gle/YFxavJGmj66xBCcaA"
                                                 target="_blank"
@@ -333,20 +299,12 @@ const App: React.FC = () => {
 
             <StaticContent />
 
-            <Modal isOpen={isLeadModalOpen} onClose={() => setIsLeadModalOpen(false)} title="Download Proposal">
+            <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="Download Proposal">
                 <LeadCaptureForm 
                     onSubmit={handleLeadSubmission} 
                     onSuccessComplete={handleDownloadAndClose}
                 />
             </Modal>
-            
-            {generatedEmail && (
-                 <EmailPreviewModal 
-                    isOpen={isEmailModalOpen} 
-                    onClose={() => setIsEmailModalOpen(false)}
-                    email={generatedEmail}
-                />
-            )}
         </>
     );
 };
