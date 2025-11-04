@@ -265,7 +265,7 @@ const App: React.FC = () => {
                                                 onAboutChange={handleAboutChange}
                                             />
                                         </div>
-                                        <div className="mt-auto pt-6 border-t border-slate-200 text-center">
+                                        <div className="mt-auto pt-6 border-t border-slate-200 flex flex-col items-center">
                                            <Button
                                                 onClick={handleDownloadClick}
                                                 icon={<DownloadIcon />}
