@@ -39,3 +39,8 @@ export interface GeneratedProposal {
   clientResponsibilities: string[];
   exclusions: string[];
 }
+
+export interface GeneratedEmail {
+  subject: string;
+  body: string;
+}

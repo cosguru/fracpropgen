@@ -1,5 +1,6 @@
+
 import { GoogleGenAI, Type } from "@google/genai";
-import { ProposalFormInput, GeneratedProposal } from '../types';
+import { ProposalFormInput, GeneratedProposal, GeneratedEmail } from '../types';
 import { templates } from '../data/templates';
 
 // FIX: Per coding guidelines, the API key must be obtained exclusively from `process.env.API_KEY`. This also resolves the TypeScript error.
@@ -42,6 +43,16 @@ const proposalSchema = {
     },
     required: ['title', 'executiveSummary', 'problemStatement', 'proposedSolution', 'timeline', 'investment', 'about', 'nextSteps', 'termsAndConditions', 'ninetyDayPlan', 'measuringSuccess', 'clientResponsibilities', 'exclusions'],
 };
+
+const emailSchema = {
+    type: Type.OBJECT,
+    properties: {
+        subject: { type: Type.STRING, description: "A compelling subject line for the email." },
+        body: { type: Type.STRING, description: "The full body of the email, including placeholders like [Client Name] and line breaks for readability." },
+    },
+    required: ['subject', 'body'],
+};
+
 
 export const generateProposalContent = async (
     data: ProposalFormInput
@@ -106,5 +117,48 @@ export const generateProposalContent = async (
     } catch (e) {
         console.error("Failed to parse JSON response:", jsonText);
         throw new Error("The AI returned an invalid response format.");
+    }
+};
+
+export const generateCompanionEmail = async (
+    proposal: GeneratedProposal,
+    clientName: string,
+    executiveName: string
+): Promise<GeneratedEmail> => {
+    const prompt = `
+        Based on the provided proposal title and summary, generate a concise and professional email to send to the client. The email should introduce the attached proposal and encourage the client to review it.
+
+        **Proposal Details:**
+        - Title: ${proposal.title}
+        - Executive Summary: ${proposal.executiveSummary}
+        - Client Name: ${clientName}
+        - Sender Name: ${executiveName}
+
+        **Instructions:**
+        1.  Create a compelling and relevant subject line.
+        2.  Write a brief email body. It should be friendly, professional, and to the point.
+        3.  Start the email by addressing the client by name (e.g., "Hi [Client Name],").
+        4.  Mention that the proposal is attached.
+        5.  Briefly reiterate the core value from the executive summary.
+        6.  Include a clear call to action (e.g., suggesting a follow-up call).
+        7.  End with a professional closing.
+        8.  The entire output must be a single, valid JSON object that adheres to the provided schema.
+    `;
+
+    const response = await ai.models.generateContent({
+        model: 'gemini-2.5-flash',
+        contents: prompt,
+        config: {
+            responseMimeType: 'application/json',
+            responseSchema: emailSchema,
+        }
+    });
+
+    const jsonText = response.text.trim();
+    try {
+        return JSON.parse(jsonText) as GeneratedEmail;
+    } catch (e) {
+        console.error("Failed to parse JSON response for email:", jsonText);
+        throw new Error("The AI returned an invalid response format for the email.");
     }
 };

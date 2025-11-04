@@ -1,9 +1,9 @@
 
 import React, { useState, useCallback, useEffect } from 'react';
-import { ProposalFormInput, GeneratedProposal } from './types';
+import { ProposalFormInput, GeneratedProposal, GeneratedEmail } from './types';
 import ProposalForm from './components/ProposalForm';
 import ProposalPreview from './components/ProposalPreview';
-import { generateProposalContent } from './services/geminiService';
+import { generateProposalContent, generateCompanionEmail } from './services/geminiService';
 import { exportToDocx } from './services/wordService';
 import { sendLeadToSysteme } from './services/systemeService';
 import ProgressBar from './components/ui/ProgressBar';
@@ -11,12 +11,21 @@ import Button from './components/ui/Button';
 import Modal from './components/ui/Modal';
 import LeadCaptureForm from './components/LeadCaptureForm';
 import { templates } from './data/templates';
+import EmailPreviewModal from './components/EmailPreviewModal';
 
 const DownloadIcon = () => (
     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
         <path fillRule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clipRule="evenodd" />
     </svg>
 );
+
+const EmailIcon = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+        <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
+        <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
+    </svg>
+);
+
 
 const EmptyStateIcon = () => (
      <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 text-slate-300 mb-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -140,10 +149,14 @@ const App: React.FC = () => {
     });
 
     const [generatedProposal, setGeneratedProposal] = useState<GeneratedProposal | null>(null);
+    const [generatedEmail, setGeneratedEmail] = useState<GeneratedEmail | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [isGeneratingEmail, setIsGeneratingEmail] = useState<boolean>(false);
     const [progress, setProgress] = useState<number>(0);
     const [error, setError] = useState<string | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);
+
 
     useEffect(() => {
         let interval: NodeJS.Timeout | undefined;
@@ -201,6 +214,7 @@ const App: React.FC = () => {
         setIsLoading(true);
         setError(null);
         setGeneratedProposal(null);
+        setGeneratedEmail(null);
 
         try {
             const proposal = await generateProposalContent(formInput);
@@ -218,6 +232,22 @@ const App: React.FC = () => {
             setIsLoading(false);
         }
     };
+
+    const handleGenerateEmail = async () => {
+        if (!generatedProposal) return;
+        setIsGeneratingEmail(true);
+        setError(null);
+        try {
+            const email = await generateCompanionEmail(generatedProposal, formInput.clientName, formInput.executiveName);
+            setGeneratedEmail(email);
+            setIsEmailModalOpen(true);
+        } catch (err) {
+             console.error(err);
+            setError('Failed to generate email. Please try again.');
+        } finally {
+            setIsGeneratingEmail(false);
+        }
+    }
     
     const handleDownloadClick = () => {
         if (generatedProposal) {
@@ -274,13 +304,23 @@ const App: React.FC = () => {
                                             />
                                         </div>
                                         <div className="mt-auto pt-6 border-t border-slate-200 flex flex-col items-center">
-                                           <Button
-                                                onClick={handleDownloadClick}
-                                                icon={<DownloadIcon />}
-                                                className="w-full sm:w-auto"
-                                            >
-                                                Download as Word Doc
-                                            </Button>
+                                           <div className="flex flex-col sm:flex-row gap-4">
+                                                <Button
+                                                    onClick={handleGenerateEmail}
+                                                    icon={<EmailIcon />}
+                                                    className="w-full sm:w-auto bg-slate-600 hover:bg-slate-700 focus:ring-slate-500 from-slate-500 to-slate-600"
+                                                    isLoading={isGeneratingEmail}
+                                                >
+                                                    Generate Email to Client
+                                                </Button>
+                                                <Button
+                                                    onClick={handleDownloadClick}
+                                                    icon={<DownloadIcon />}
+                                                    className="w-full sm:w-auto"
+                                                >
+                                                    Download as Word Doc
+                                                </Button>
+                                            </div>
                                             <a
                                                 href="https://forms.gle/YFxavJGmj66xBCcaA"
                                                 target="_blank"
@@ -312,6 +352,15 @@ const App: React.FC = () => {
                     onSuccessComplete={handleDownloadAndClose}
                 />
             </Modal>
+            {generatedEmail && (
+                 <EmailPreviewModal
+                    isOpen={isEmailModalOpen}
+                    onClose={() => setIsEmailModalOpen(false)}
+                    subject={generatedEmail.subject}
+                    body={generatedEmail.body}
+                />
+            )}
+           
         </>
     );
 };
