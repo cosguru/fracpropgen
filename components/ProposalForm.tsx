@@ -1,14 +1,15 @@
-
-import React from 'react';
+import React, { useState, useCallback } from 'react';
 import { ProposalFormInput } from '../types';
 import Input from './ui/Input';
 import Textarea from './ui/Textarea';
 import Button from './ui/Button';
 import { templates } from '../data/templates';
+import { generateSuggestions } from '../services/geminiService';
+import SuggestionPopover from './ui/SuggestionPopover';
 
 interface ProposalFormProps {
     input: ProposalFormInput;
-    onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+    onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | { target: { name: string; value: string } }) => void;
     onTemplateChange: (templateId: string) => void;
     onBrandColorChange: (color: string) => void;
     onSubmit: (e: React.FormEvent) => void;
@@ -32,10 +33,40 @@ const brandColors = [
 const ProposalForm: React.FC<ProposalFormProps> = ({ input, onChange, onTemplateChange, onBrandColorChange, onSubmit, isLoading }) => {
     const selectedTemplate = templates.find(t => t.id === input.templateId) || templates[0];
 
+    const [suggestions, setSuggestions] = useState<string[]>([]);
+    const [suggestionTarget, setSuggestionTarget] = useState<HTMLTextAreaElement | null>(null);
+    const [isSuggestingFor, setIsSuggestingFor] = useState<string | null>(null);
+
     const handleTemplateSelectionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         onTemplateChange(e.target.value);
     };
     
+    const handleSuggestionRequest = useCallback(async (fieldName: 'projectGoal' | 'deliverables', targetElement: HTMLTextAreaElement) => {
+        const textToImprove = input[fieldName];
+        if (!textToImprove.trim()) return;
+
+        setIsSuggestingFor(fieldName);
+        setSuggestionTarget(targetElement);
+        try {
+            const result = await generateSuggestions(textToImprove);
+            setSuggestions(result);
+        } catch (error) {
+            console.error("Failed to get suggestions:", error);
+            setSuggestions([]);
+        } finally {
+            setIsSuggestingFor(null);
+        }
+    }, [input]);
+    
+    const handleSuggestionSelect = useCallback((suggestion: string) => {
+        if (suggestionTarget) {
+            onChange({ target: { name: suggestionTarget.name, value: suggestion } });
+            setSuggestions([]);
+            setSuggestionTarget(null);
+        }
+    }, [suggestionTarget, onChange]);
+    
+
     return (
         <form onSubmit={onSubmit} className="bg-white p-6 sm:p-8 rounded-xl shadow-lg border border-slate-100 space-y-6">
             <div>
@@ -124,6 +155,8 @@ const ProposalForm: React.FC<ProposalFormProps> = ({ input, onChange, onTemplate
                 onChange={onChange}
                 placeholder="What is the primary objective for the client?"
                 rows={3}
+                onSuggestionClick={(el) => handleSuggestionRequest('projectGoal', el)}
+                isSuggesting={isSuggestingFor === 'projectGoal'}
             />
              <Textarea 
                 label="Key Deliverables"
@@ -132,6 +165,8 @@ const ProposalForm: React.FC<ProposalFormProps> = ({ input, onChange, onTemplate
                 onChange={onChange}
                 placeholder="List main deliverables, separated by commas"
                 rows={3}
+                onSuggestionClick={(el) => handleSuggestionRequest('deliverables', el)}
+                isSuggesting={isSuggestingFor === 'deliverables'}
             />
             <Input 
                 label="Timeline" 
@@ -159,6 +194,15 @@ const ProposalForm: React.FC<ProposalFormProps> = ({ input, onChange, onTemplate
             <Button type="submit" isLoading={isLoading} icon={<SparklesIcon />} className="w-full">
                 Generate Proposal
             </Button>
+
+            {suggestions.length > 0 && suggestionTarget && (
+                <SuggestionPopover
+                    targetElement={suggestionTarget}
+                    suggestions={suggestions}
+                    onSelect={handleSuggestionSelect}
+                    onClose={() => setSuggestions([])}
+                />
+            )}
         </form>
     );
 };

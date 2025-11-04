@@ -1,10 +1,9 @@
-
 import { ProposalTemplate } from '../types';
 
 export const templates: ProposalTemplate[] = [
     {
         id: 'strategic-leader',
-        name: 'Strategic Leader (Fractional Executive)',
+        name: 'Strategic Leader (fExecutive)',
         description: 'A balanced, high-level approach for general leadership roles.',
         systemInstruction: 'You are an expert proposal writer for fractional executives. Your proposals are clear, concise, and persuasive, focusing on strategic value and business outcomes. Your tone is confident, professional, and client-focused, leading to a high conversion rate.',
         exampleData: {
@@ -15,8 +14,32 @@ export const templates: ProposalTemplate[] = [
         },
     },
     {
+        id: 'business-consultant',
+        name: 'Business Consultant',
+        description: 'A versatile template for general business improvement projects.',
+        systemInstruction: 'You are an expert proposal writer for Business Consultants. Your proposals are structured, logical, and focused on solving specific business problems with clear, actionable solutions. Your tone is professional, analytical, and results-oriented.',
+        exampleData: {
+            executiveRole: 'Business Consultant',
+            projectGoal: 'Analyze current operations and provide a detailed roadmap for improving efficiency and reducing costs by 15%.',
+            deliverables: 'Current state analysis report, Process improvement recommendations, Implementation roadmap, Financial impact assessment',
+            price: '$12,000 fixed project fee',
+        },
+    },
+    {
+        id: 'strategic-advisor',
+        name: 'Strategic Advisor',
+        description: 'A high-level template for providing strategic guidance.',
+        systemInstruction: 'You are an expert proposal writer for Strategic Advisors. Your proposals are concise, insightful, and tailored for an executive audience. You focus on high-level strategy, market positioning, and long-term value creation. Your tone is that of a trusted, experienced partner.',
+        exampleData: {
+            executiveRole: 'Strategic Advisor',
+            projectGoal: 'Provide ongoing strategic counsel to the CEO and leadership team to navigate market expansion and competitive threats.',
+            deliverables: 'Monthly strategic advisory sessions, Competitor landscape analysis, Market entry strategy document, Quarterly board meeting preparation support',
+            price: '$6,000/month retainer',
+        },
+    },
+    {
         id: 'marketing-maverick',
-        name: 'Marketing Maverick (CMO)',
+        name: 'Marketing Maverick (fCMO)',
         description: 'Focuses on growth, metrics, and customer acquisition.',
         systemInstruction: 'You are an expert proposal writer for Fractional CMOs. Your proposals are data-driven, highlighting growth metrics, customer acquisition strategies, and ROI. Your tone is energetic, insightful, and laser-focused on market domination.',
         exampleData: {
@@ -28,7 +51,7 @@ export const templates: ProposalTemplate[] = [
     },
     {
         id: 'financial-architect',
-        name: 'Financial Architect (CFO)',
+        name: 'Financial Architect (fCFO)',
         description: 'Emphasizes profitability, risk management, and financial health.',
         systemInstruction: 'You are an expert proposal writer for Fractional CFOs. Your proposals are analytical and precise, focusing on profitability, financial stability, and risk mitigation. Your tone is authoritative, trustworthy, and centered on fiscal responsibility and strategic financial planning.',
         exampleData: {
@@ -40,7 +63,7 @@ export const templates: ProposalTemplate[] = [
     },
     {
         id: 'tech-visionary',
-        name: 'Tech Visionary (CTO)',
+        name: 'Tech Visionary (fCTO)',
         description: 'Highlights innovation, scalability, and technical strategy.',
         systemInstruction: 'You are an expert proposal writer for Fractional CTOs. Your proposals are forward-thinking and innovative, emphasizing technical excellence, scalability, and digital transformation. Your tone is visionary, strategic, and focused on leveraging technology to create a competitive advantage.',
         exampleData: {
@@ -52,7 +75,7 @@ export const templates: ProposalTemplate[] = [
     },
     {
         id: 'operations-expert',
-        name: 'Operations Expert (COO)',
+        name: 'Operations Expert (fCOO)',
         description: 'Focuses on efficiency, process, and scaling operations.',
         systemInstruction: 'You are an expert proposal writer for Fractional COOs. Your proposals are structured and practical, focusing on operational efficiency, process improvement, and scalable growth. Your tone is methodical, decisive, and centered on building a robust operational foundation for the business.',
         exampleData: {
@@ -64,7 +87,7 @@ export const templates: ProposalTemplate[] = [
     },
     {
         id: 'people-champion',
-        name: 'People Champion (CHRO)',
+        name: 'People Champion (fCHRO)',
         description: 'Centers on talent, culture, and organizational health.',
         systemInstruction: 'You are an expert proposal writer for Fractional CHROs. Your proposals are people-centric and strategic, focusing on building strong company culture, attracting top talent, and enhancing employee engagement. Your tone is empathetic, insightful, and dedicated to aligning people strategy with business objectives.',
         exampleData: {
@@ -76,7 +99,7 @@ export const templates: ProposalTemplate[] = [
     },
     {
         id: 'sales-strategist',
-        name: 'Sales Strategist (CSO)',
+        name: 'Sales Strategist (fCSO)',
         description: 'Highlights revenue growth, sales process, and team performance.',
         systemInstruction: 'You are an expert proposal writer for Fractional Sales Leaders. Your proposals are dynamic and results-driven, focusing on accelerating revenue growth, optimizing the sales process, and building high-performance sales teams. Your tone is persuasive, confident, and relentlessly focused on hitting targets and exceeding market expectations.',
         exampleData: {
