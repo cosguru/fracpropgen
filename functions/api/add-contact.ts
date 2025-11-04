@@ -1,4 +1,3 @@
-
 interface Env {
     SYSTEME_API_KEY: string;
 }
@@ -9,10 +8,8 @@ interface RequestBody {
 }
 
 // Cloudflare Pages function to add a contact to Systeme.io
-// FIX: Replaced unresolved `PagesFunction` type with an inline type for `context` and added a `Promise<Response>` return type. This resolves the "Cannot find name 'PagesFunction'" error.
 export const onRequestPost = async (context: { request: Request; env: Env }): Promise<Response> => {
     try {
-        // FIX: The standard `request.json()` method does not accept generic type arguments. The JSON payload is now typed using a type annotation on the destructured object. This resolves the "Untyped function calls may not accept type arguments" error.
         const { name, email }: RequestBody = await context.request.json();
         const apiKey = context.env.SYSTEME_API_KEY;
 
@@ -32,6 +29,7 @@ export const onRequestPost = async (context: { request: Request; env: Env }): Pr
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'Accept': 'application/json',
                 'X-API-Key': apiKey,
             },
             body: JSON.stringify({
