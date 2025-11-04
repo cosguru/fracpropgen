@@ -14,7 +14,7 @@ const Textarea: React.FC<TextareaProps> = ({ label, ...props }) => {
             <textarea
                 {...props}
                 id={props.name}
-                className="block w-full px-3 py-2 bg-white border border-slate-300 rounded-md placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition duration-150 ease-in-out"
+                className="block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brandGreen-500 focus:border-brandGreen-500 sm:text-sm transition duration-150 ease-in-out"
             />
         </div>
     );

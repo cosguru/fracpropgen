@@ -11,7 +11,7 @@ const ProgressBar: React.FC<ProgressBarProps> = ({ progress }) => {
     return (
         <div className="w-full bg-slate-200 rounded-full h-2.5">
             <div 
-                className="bg-indigo-600 h-2.5 rounded-full transition-all duration-300 ease-linear" 
+                className="bg-brandGreen-600 h-2.5 rounded-full transition-all duration-300 ease-linear" 
                 style={{ width: `${cappedProgress}%` }}
                 aria-valuenow={cappedProgress}
                 aria-valuemin={0}

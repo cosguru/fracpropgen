@@ -1,3 +1,4 @@
+
 import { ProposalTemplate } from '../types';
 
 export const templates: ProposalTemplate[] = [
@@ -11,42 +12,6 @@ export const templates: ProposalTemplate[] = [
             projectGoal: 'Develop and implement a comprehensive strategic plan to achieve 20% year-over-year growth.',
             deliverables: 'Business model analysis, 3-year strategic roadmap, OKR framework implementation, Quarterly business review process',
             price: '$10,000/month retainer',
-        },
-    },
-    {
-        id: 'project-based',
-        name: 'Project-Based Proposal',
-        description: 'A classic template for a project with a clear start, end, and fixed scope of work.',
-        systemInstruction: 'You are an expert proposal writer for fixed-scope projects. Your proposals are highly detailed, clearly outlining every deliverable, milestone, and timeline. The tone is precise, reliable, and manages expectations effectively.',
-        exampleData: {
-            executiveRole: 'Project Lead',
-            projectGoal: 'To design and launch a new customer onboarding workflow to improve user activation rates by 20% within 3 months.',
-            deliverables: 'User journey mapping, Workflow wireframes and mockups, Implementation of the new workflow in the CRM, A/B test results and analysis.',
-            price: '$15,000 fixed project fee',
-        },
-    },
-    {
-        id: 'quick-audit',
-        name: 'Quick Audit / Discovery Project',
-        description: 'A short, focused proposal for an initial, small-scale project to diagnose issues and recommend a path forward.',
-        systemInstruction: 'You are an expert proposal writer for short-term consulting engagements. Your proposals are concise, action-oriented, and clearly define the scope and deliverables of a discovery phase. The tone is direct, efficient, and builds confidence for a larger engagement.',
-        exampleData: {
-            executiveRole: 'Consultant',
-            projectGoal: 'Conduct a comprehensive audit of the current marketing funnel to identify key areas for improvement and deliver a strategic roadmap.',
-            deliverables: 'Marketing funnel performance report, Competitor analysis summary, Prioritized list of recommendations, High-level 3-month growth roadmap.',
-            price: '$2,500 one-time fee',
-        },
-    },
-    {
-        id: 'retainer-renewal',
-        name: 'Retainer Renewal Proposal',
-        description: 'A template to renew an existing retainer, highlighting past successes and outlining future goals.',
-        systemInstruction: 'You are an expert proposal writer specializing in client retention. Your proposals summarize past achievements, demonstrate value, and present a compelling vision for the continued partnership. The tone is collaborative, appreciative, and forward-looking.',
-        exampleData: {
-            executiveRole: 'Fractional Executive',
-            projectGoal: 'To continue our strategic partnership for another 6 months, focusing on scaling the content marketing engine and expanding into new channels.',
-            deliverables: 'Summary of achievements from the previous term, Q3-Q4 strategic priorities, Updated KPI targets, Continued monthly advisory and reporting.',
-            price: '$10,000/month retainer (continued)',
         },
     },
     {
