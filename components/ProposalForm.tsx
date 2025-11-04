@@ -16,7 +16,7 @@ interface ProposalFormProps {
 
 const SparklesIcon = () => (
     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-        <path fillRule="evenodd" d="M5 2a1 1 0 011 1v1h1a1 1 0 010 2H6v1a1 1 0 01-2 0V6H3a1 1 0 010-2h1V3a1 1 0 011-1zm6 0a1 1 0 011 1v1h1a1 1 0 010 2h-1v1a1 1 0 01-2 0V6h-1a1 1 0 010-2h1V3a1 1 0 011-1zM5 10a1 1 0 011 1v1h1a1 1 0 110 2H6v1a1 1 0 11-2 0v-1H3a1 1 0 110-2h1v-1a1 1 0 011-1z m6 0a1 1 0 011 1v1h1a1 1 0 110 2h-1v1a1 1 0 11-2 0v-1h-1a1 1 0 110-2h1v-1a1 1 0 011-1z" clipRule="evenodd" />
+        <path d="M10 3a1 1 0 011 1v1h1a1 1 0 110 2h-1v1a1 1 0 11-2 0V7H8a1 1 0 010-2h1V4a1 1 0 011-1zM5 9a1 1 0 00-1 1v1H3a1 1 0 100 2h1v1a1 1 0 102 0v-1h1a1 1 0 100-2H6v-1a1 1 0 00-1-1zm11-4a1 1 0 10-2 0v1h-1a1 1 0 100 2h1v1a1 1 0 102 0V7h1a1 1 0 100-2h-1V5z" />
     </svg>
 )
 
@@ -28,9 +28,9 @@ const ProposalForm: React.FC<ProposalFormProps> = ({ input, onChange, onTemplate
     };
     
     return (
-        <form onSubmit={onSubmit} className="bg-white p-6 sm:p-8 rounded-xl shadow-lg space-y-6">
+        <form onSubmit={onSubmit} className="bg-white p-6 sm:p-8 rounded-xl shadow-lg border border-slate-100 space-y-6">
             <div>
-                <h2 className="text-xl font-bold text-slate-800">1. Select a Template</h2>
+                <h2 className="text-xl font-bold font-display text-slate-800">1. Select a Template</h2>
                 <p className="text-sm text-slate-500 mt-1">Choose a persona for the AI to adopt.</p>
             </div>
 
@@ -41,7 +41,7 @@ const ProposalForm: React.FC<ProposalFormProps> = ({ input, onChange, onTemplate
                     name="templateId"
                     value={input.templateId}
                     onChange={handleTemplateSelectionChange}
-                    className="block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-brandGreen-500 focus:border-brandGreen-500 sm:text-sm transition duration-150 ease-in-out"
+                    className="block w-full px-3 py-2 bg-white border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition duration-150 ease-in-out"
                 >
                     {templates.map(template => (
                         <option key={template.id} value={template.id}>
@@ -51,7 +51,7 @@ const ProposalForm: React.FC<ProposalFormProps> = ({ input, onChange, onTemplate
                 </select>
 
                 {selectedTemplate && (
-                    <div className="mt-3 p-3 bg-brandGreen-50 rounded-md text-sm text-brandGreen-800 border border-brandGreen-200 space-y-2">
+                    <div className="mt-3 p-3 bg-indigo-50 rounded-md text-sm text-indigo-800 border border-indigo-200 space-y-2">
                         <p>{selectedTemplate.description}</p>
                         <p className="text-xs opacity-80"><strong className="font-semibold">Persona:</strong> {selectedTemplate.systemInstruction}</p>
                     </div>
@@ -59,7 +59,7 @@ const ProposalForm: React.FC<ProposalFormProps> = ({ input, onChange, onTemplate
             </div>
 
             <div className="space-y-1 pt-4 border-t border-slate-200">
-                <h2 className="text-xl font-bold text-slate-800">2. Proposal Details</h2>
+                <h2 className="text-xl font-bold font-display text-slate-800">2. Proposal Details</h2>
                 <p className="text-sm text-slate-500">Provide the key information below.</p>
             </div>
             

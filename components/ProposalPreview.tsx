@@ -1,3 +1,4 @@
+
 import React, { useLayoutEffect, useRef } from 'react';
 import { GeneratedProposal } from '../types';
 
@@ -8,7 +9,7 @@ interface ProposalPreviewProps {
 
 const Section: React.FC<{ title: string; children: React.ReactNode }> = ({ title, children }) => (
     <div className="mb-6 last:mb-0">
-        <h3 className="text-lg font-semibold text-slate-900 mb-3 pb-2 border-b border-slate-200">{title}</h3>
+        <h3 className="text-lg font-bold font-display text-slate-900 mb-3 pb-2 border-b border-slate-200">{title}</h3>
         <div className="prose prose-slate max-w-none text-slate-700">
             {children}
         </div>
@@ -36,7 +37,7 @@ const ProposalPreview: React.FC<ProposalPreviewProps> = ({ proposal, onAboutChan
 
     return (
         <div className="prose prose-slate max-w-none">
-            <h2 className="text-3xl font-bold text-center text-slate-900 mb-8">{proposal.title}</h2>
+            <h2 className="text-3xl font-bold font-display text-center text-slate-900 mb-8">{proposal.title}</h2>
             
             <Section title="Executive Summary">
                 <p>{proposal.executiveSummary}</p>

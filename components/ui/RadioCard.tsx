@@ -19,7 +19,7 @@ const RadioCard: React.FC<RadioCardProps> = ({ id, children, ...props }) => {
                 className="
                     flex flex-col p-4 border-2 border-slate-200 rounded-lg 
                     cursor-pointer transition-colors duration-200
-                    peer-checked:border-brandGreen-500 peer-checked:bg-brandGreen-50
+                    peer-checked:border-indigo-500 peer-checked:bg-indigo-50
                     hover:border-slate-300 hover:bg-slate-50
                 "
             >
