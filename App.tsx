@@ -1,12 +1,12 @@
 
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { ProposalFormInput, GeneratedProposal } from './types';
 import ProposalForm from './components/ProposalForm';
 import ProposalPreview from './components/ProposalPreview';
 import { generateProposalContent } from './services/geminiService';
 import { exportToDocx } from './services/wordService';
 import { sendLeadToSysteme } from './services/systemeService';
-import Loader from './components/ui/Loader';
+import ProgressBar from './components/ui/ProgressBar';
 import Button from './components/ui/Button';
 import Modal from './components/ui/Modal';
 import LeadCaptureForm from './components/LeadCaptureForm';
@@ -50,8 +50,35 @@ const App: React.FC = () => {
 
     const [generatedProposal, setGeneratedProposal] = useState<GeneratedProposal | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [progress, setProgress] = useState<number>(0);
     const [error, setError] = useState<string | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
+
+    useEffect(() => {
+        let interval: NodeJS.Timeout | undefined;
+        if (isLoading) {
+            setProgress(0);
+            interval = setInterval(() => {
+                setProgress(prev => {
+                    if (prev >= 95) {
+                        clearInterval(interval);
+                        return 95;
+                    }
+                    const increment = prev < 50 ? 10 : (prev < 80 ? 5 : 2);
+                    return prev + increment;
+                });
+            }, 400);
+        } else {
+            setProgress(0);
+        }
+
+        return () => {
+            if (interval) {
+                clearInterval(interval);
+            }
+        };
+    }, [isLoading]);
+
 
     const handleFormChange = useCallback((e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
@@ -86,12 +113,17 @@ const App: React.FC = () => {
 
         try {
             const proposal = await generateProposalContent(formInput);
-            setGeneratedProposal(proposal);
-            setFormInput(prev => ({...prev, executiveAbout: proposal.about}));
+            setProgress(100);
+            
+            setTimeout(() => {
+                setGeneratedProposal(proposal);
+                setFormInput(prev => ({...prev, executiveAbout: proposal.about}));
+                setIsLoading(false);
+            }, 500); // Short delay to show 100%
+
         } catch (err) {
             console.error(err);
             setError('Failed to generate proposal. Please check your inputs and try again.');
-        } finally {
             setIsLoading(false);
         }
     };
@@ -131,9 +163,9 @@ const App: React.FC = () => {
                         <div className="bg-white p-2 sm:p-3 rounded-xl shadow-lg h-full flex flex-col">
                             <div className="p-4 sm:p-6 flex flex-col flex-grow h-full">
                                 {isLoading ? (
-                                    <div className="flex-grow flex flex-col items-center justify-center text-center">
-                                        <Loader />
-                                        <p className="text-slate-700 font-semibold mt-4">Generating your proposal...</p>
+                                    <div className="flex-grow flex flex-col items-center justify-center text-center w-full max-w-sm mx-auto">
+                                        <ProgressBar progress={progress} />
+                                        <p className="text-slate-700 font-semibold mt-4 text-lg" aria-live="polite">{Math.round(progress)}%</p>
                                         <p className="text-slate-500 mt-2 text-sm">The AI is crafting your winning proposal. This can take a moment.</p>
                                     </div>
                                 ) : error ? (
