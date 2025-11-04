@@ -5,7 +5,7 @@ import Button from './ui/Button';
 import Spinner from './ui/Spinner';
 
 interface LeadCaptureFormProps {
-    onSubmit: (firstName: string, lastName: string, email: string) => Promise<boolean>;
+    onSubmit: (firstName: string, lastName: string, email: string) => Promise<{ success: boolean; error?: string }>;
     onSuccessComplete: () => void;
 }
 
@@ -21,9 +21,9 @@ const SuccessIcon = () => (
     </svg>
 )
 
-// Simple regex for email validation
+// A more robust regex for email validation
 const validateEmail = (email: string) => {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  return /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email);
 };
 
 
@@ -49,13 +49,13 @@ const LeadCaptureForm: React.FC<LeadCaptureFormProps> = ({ onSubmit, onSuccessCo
         e.preventDefault();
         setError('');
 
-        if (!firstName.trim()) {
-            setError('Please enter your first name.');
+        if (!firstName.trim() || firstName.trim().length < 2) {
+            setError('Please enter a valid first name (at least 2 characters).');
             return;
         }
         
-        if (!lastName.trim()) {
-            setError('Please enter your last name.');
+        if (!lastName.trim() || lastName.trim().length < 2) {
+            setError('Please enter a valid last name (at least 2 characters).');
             return;
         }
 
@@ -66,12 +66,12 @@ const LeadCaptureForm: React.FC<LeadCaptureFormProps> = ({ onSubmit, onSuccessCo
         
         setStatus('loading');
         
-        const success = await onSubmit(firstName, lastName, email);
+        const result = await onSubmit(firstName.trim(), lastName.trim(), email.trim());
 
-        if (success) {
+        if (result.success) {
             setStatus('success');
         } else {
-            setError('Could not save contact. Please try again.');
+            setError(result.error || 'Could not save contact. Please try again.');
             setStatus('error');
         }
     };

@@ -130,6 +130,7 @@ const App: React.FC = () => {
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [progress, setProgress] = useState<number>(0);
     const [error, setError] = useState<string | null>(null);
+    const [formErrors, setFormErrors] = useState<Partial<Record<keyof ProposalFormInput, string>>>({});
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     useEffect(() => {
@@ -186,9 +187,29 @@ const App: React.FC = () => {
         setGeneratedProposal(prev => (prev ? { ...prev, about: newAboutText } : null));
         setFormInput(prev => ({ ...prev, executiveAbout: newAboutText }));
     }, []);
+    
+    const validateProposalForm = (data: ProposalFormInput): boolean => {
+        const errors: Partial<Record<keyof ProposalFormInput, string>> = {};
+        
+        if (!data.executiveName.trim() || data.executiveName.trim().length < 2) errors.executiveName = "Your name must be at least 2 characters.";
+        if (!data.executiveRole.trim() || data.executiveRole.trim().length < 3) errors.executiveRole = "Your role must be at least 3 characters.";
+        if (!data.clientName.trim() || data.clientName.trim().length < 2) errors.clientName = "Client name must be at least 2 characters.";
+        if (!data.projectGoal.trim() || data.projectGoal.trim().length < 10) errors.projectGoal = "Project goal must be at least 10 characters.";
+        if (!data.deliverables.trim() || data.deliverables.trim().length < 10) errors.deliverables = "Deliverables must be at least 10 characters.";
+        if (!data.timeline.trim() || data.timeline.trim().length < 3) errors.timeline = "Timeline must be at least 3 characters.";
+        if (!data.price.trim()) errors.price = "Pricing is required.";
+
+        setFormErrors(errors);
+        return Object.keys(errors).length === 0;
+    };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        
+        if (!validateProposalForm(formInput)) {
+            return;
+        }
+
         setIsLoading(true);
         setError(null);
         setGeneratedProposal(null);
@@ -239,6 +260,7 @@ const App: React.FC = () => {
                         onBrandColorChange={handleBrandColorChange}
                         onSubmit={handleSubmit}
                         isLoading={isLoading} 
+                        errors={formErrors}
                     />
 
                     <div className="mt-8 lg:mt-12">

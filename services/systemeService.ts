@@ -1,3 +1,4 @@
+
 /**
  * ===================================================================
  * HOW TO SET UP YOUR SYSTEME.IO INTEGRATION
@@ -28,7 +29,7 @@
  * ===================================================================
  */
 
-export const sendLeadToSysteme = async (firstName: string, lastName: string, email: string, tags?: number[]): Promise<boolean> => {
+export const sendLeadToSysteme = async (firstName: string, lastName: string, email: string, tags?: number[]): Promise<{ success: boolean; error?: string }> => {
     try {
         // This fetch call goes to our own Cloudflare Function, not directly to external services.
         // The function is located at /functions/api/add-contact.ts
@@ -42,13 +43,16 @@ export const sendLeadToSysteme = async (firstName: string, lastName: string, ema
 
         if (!response.ok) {
             const errorData = await response.json();
-            console.error('Failed to add contact via serverless function.', errorData.error);
-            return false;
+            const errorMessage = errorData.errors 
+                ? Object.values(errorData.errors).join(' ') 
+                : (errorData.error || 'An unknown error occurred on the server.');
+            console.error('Failed to add contact via serverless function.', errorMessage);
+            return { success: false, error: errorMessage };
         }
 
-        return true; // Success
+        return { success: true };
     } catch (error) {
         console.error('Error sending lead via service:', error);
-        return false;
+        return { success: false, error: 'A network error occurred. Please try again.' };
     }
 };

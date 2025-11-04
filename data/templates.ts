@@ -109,5 +109,41 @@ export const templates: ProposalTemplate[] = [
             deliverables: 'Company culture assessment, Employee engagement survey and action plan, Performance management system redesign, Leadership training program',
             price: '$7,000/month retainer',
         },
+    },
+    {
+        id: 'fractional-cpo',
+        name: 'Fractional CPO',
+        description: 'Focuses on product vision, strategy, and roadmap execution.',
+        systemInstruction: 'You are an expert proposal writer for Fractional CPOs. Your proposals are visionary and customer-centric, focusing on product-market fit, user experience, and building a scalable product organization. Your tone is innovative, strategic, and focused on delivering market-leading products.',
+        exampleData: {
+            executiveRole: 'Fractional CPO',
+            projectGoal: 'Define a clear product vision and build a 12-month roadmap to increase user engagement by 40%.',
+            deliverables: 'Product strategy document, Competitive analysis, User persona development, Prioritized feature roadmap, Quarterly product reviews',
+            price: '$9,000/month retainer',
+        },
+    },
+    {
+        id: 'fractional-cio',
+        name: 'Fractional CIO',
+        description: 'Emphasizes IT infrastructure, digital transformation, and cybersecurity.',
+        systemInstruction: 'You are an expert proposal writer for Fractional CIOs. Your proposals are technical yet business-focused, highlighting digital transformation, IT infrastructure scalability, and robust cybersecurity measures. Your tone is authoritative, forward-thinking, and centered on using technology as a strategic enabler for business growth.',
+        exampleData: {
+            executiveRole: 'Fractional CIO',
+            projectGoal: 'Develop and execute a digital transformation strategy to modernize IT systems and improve data security.',
+            deliverables: 'IT infrastructure audit, Cloud migration plan, Cybersecurity policy implementation, Vendor management framework, Technology budget optimization',
+            price: '$9,500/month retainer',
+        },
+    },
+    {
+        id: 'management-consultant',
+        name: 'Management Consultant',
+        description: 'A project-based template for organizational change and performance improvement.',
+        systemInstruction: 'You are an expert proposal writer for Management Consultants. Your proposals are analytical and outcome-driven, focused on solving specific organizational challenges and delivering measurable performance improvements. Your tone is objective, structured, and collaborative.',
+        exampleData: {
+            executiveRole: 'Management Consultant',
+            projectGoal: 'Lead a change management initiative to support the successful adoption of a new enterprise-wide software system.',
+            deliverables: 'Change impact analysis, Communication plan, Stakeholder engagement strategy, Training program development, Post-implementation support plan',
+            price: '$25,000 fixed project fee',
+        },
     }
 ];

@@ -13,6 +13,7 @@ interface ProposalFormProps {
     onBrandColorChange: (color: string) => void;
     onSubmit: (e: React.FormEvent) => void;
     isLoading: boolean;
+    errors: Partial<Record<keyof ProposalFormInput, string>>;
 }
 
 const SparklesIcon = () => (
@@ -29,7 +30,7 @@ const brandColors = [
     { name: 'Amber', hex: '#d97706', className: 'bg-amber-600' },
 ];
 
-const ProposalForm: React.FC<ProposalFormProps> = ({ input, onChange, onTemplateChange, onBrandColorChange, onSubmit, isLoading }) => {
+const ProposalForm: React.FC<ProposalFormProps> = ({ input, onChange, onTemplateChange, onBrandColorChange, onSubmit, isLoading, errors }) => {
     const selectedTemplate = templates.find(t => t.id === input.templateId) || templates[0];
 
     const handleTemplateSelectionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -102,6 +103,7 @@ const ProposalForm: React.FC<ProposalFormProps> = ({ input, onChange, onTemplate
                 value={input.executiveName}
                 onChange={onChange}
                 placeholder="e.g., John Smith Consulting"
+                error={errors.executiveName}
             />
             <Input 
                 label="Your Role" 
@@ -109,6 +111,7 @@ const ProposalForm: React.FC<ProposalFormProps> = ({ input, onChange, onTemplate
                 value={input.executiveRole}
                 onChange={onChange}
                 placeholder="e.g., Fractional CFO"
+                error={errors.executiveRole}
             />
             <Input 
                 label="Client Name / Company" 
@@ -116,6 +119,7 @@ const ProposalForm: React.FC<ProposalFormProps> = ({ input, onChange, onTemplate
                 value={input.clientName}
                 onChange={onChange}
                 placeholder="e.g., Innovate Corp"
+                error={errors.clientName}
             />
             <Textarea 
                 label="Project Goal"
@@ -124,6 +128,7 @@ const ProposalForm: React.FC<ProposalFormProps> = ({ input, onChange, onTemplate
                 onChange={onChange}
                 placeholder="What is the primary objective for the client?"
                 rows={3}
+                error={errors.projectGoal}
             />
              <Textarea 
                 label="Key Deliverables"
@@ -132,6 +137,7 @@ const ProposalForm: React.FC<ProposalFormProps> = ({ input, onChange, onTemplate
                 onChange={onChange}
                 placeholder="List main deliverables, separated by commas"
                 rows={3}
+                error={errors.deliverables}
             />
             <Input 
                 label="Timeline" 
@@ -139,6 +145,7 @@ const ProposalForm: React.FC<ProposalFormProps> = ({ input, onChange, onTemplate
                 value={input.timeline}
                 onChange={onChange}
                 placeholder="e.g., 6-Month Engagement"
+                error={errors.timeline}
             />
              <Input 
                 label="Pricing / Fee Structure" 
@@ -146,6 +153,7 @@ const ProposalForm: React.FC<ProposalFormProps> = ({ input, onChange, onTemplate
                 value={input.price}
                 onChange={onChange}
                 placeholder="e.g., $8,000/month retainer"
+                error={errors.price}
             />
              <Textarea 
                 label="About You / Company (Optional)"
