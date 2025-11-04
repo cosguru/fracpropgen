@@ -26,9 +26,21 @@ const proposalSchema = {
         ninetyDayPlan: {
             type: Type.ARRAY,
             items: { type: Type.STRING }
+        },
+        measuringSuccess: {
+            type: Type.ARRAY,
+            items: { type: Type.STRING }
+        },
+        clientResponsibilities: {
+            type: Type.ARRAY,
+            items: { type: Type.STRING }
+        },
+        exclusions: {
+            type: Type.ARRAY,
+            items: { type: Type.STRING }
         }
     },
-    required: ['title', 'executiveSummary', 'problemStatement', 'proposedSolution', 'timeline', 'investment', 'about', 'nextSteps', 'termsAndConditions', 'ninetyDayPlan'],
+    required: ['title', 'executiveSummary', 'problemStatement', 'proposedSolution', 'timeline', 'investment', 'about', 'nextSteps', 'termsAndConditions', 'ninetyDayPlan', 'measuringSuccess', 'clientResponsibilities', 'exclusions'],
 };
 
 export const generateProposalContent = async (
@@ -64,13 +76,16 @@ export const generateProposalContent = async (
         - executiveSummary: A brief, powerful summary of the proposal.
         - problemStatement: Elaborate on the client's goal, framing it as a challenge or opportunity.
         - proposedSolution: A list of detailed actions based on the key deliverables. Each item in the list should be a clear, actionable statement.
+        - measuringSuccess: A list of 2-3 key performance indicators (KPIs) to track progress against the project goal.
+        - exclusions: A list of 2-3 items or activities explicitly out of scope to manage expectations.
+        - ninetyDayPlan: A high-level 30-60-90 day plan as a list of three strings. The first string for Month 1 (Discovery & Planning), the second for Month 2 (Execution & Implementation), and the third for Month 3 (Optimization & Reporting). Base the specifics on the project goal and deliverables.
         - timeline: A confirmation of the engagement timeline.
         - investment: A confirmation of the pricing structure.
+        - clientResponsibilities: A list of key duties the client must fulfill for success, like providing timely access to data, stakeholders, and feedback.
         - about: The content for the 'About' section, generated or refined as per the instructions above.
         - nextSteps: Clear next steps for the client to engage.
-        - termsAndConditions: A list of standard professional service terms. Include items for 'Payment Terms', 'Confidentiality', and 'Termination'.
-        - ninetyDayPlan: A high-level 30-60-90 day plan as a list of three strings. The first string for Month 1 (Discovery & Planning), the second for Month 2 (Execution & Implementation), and the third for Month 3 (Optimization & Reporting). Base the specifics on the project goal and deliverables.
-
+        - termsAndConditions: A list of standard professional service terms. Create professional clauses for each of the following: 'Payment Terms' (detailing invoicing and due dates), 'Confidentiality' (mutual non-disclosure), 'Intellectual Property' (clarifying ownership of deliverables upon final payment), 'Termination' (conditions for ending the agreement, e.g., 30-day notice), and 'Limitation of Liability' (capping liability to fees paid under this agreement).
+        
         The tone should be confident, professional, and client-focused. Ensure the output is a single, valid JSON object.
     `;
 

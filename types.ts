@@ -35,4 +35,7 @@ export interface GeneratedProposal {
   nextSteps: string;
   termsAndConditions: string[];
   ninetyDayPlan: string[];
+  measuringSuccess: string[];
+  clientResponsibilities: string[];
+  exclusions: string[];
 }

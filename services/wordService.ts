@@ -90,6 +90,13 @@ const createSignatureBlock = (clientName: string, executiveName: string, executi
     });
 };
 
+const createBulletedList = (items: string[]) => items.map(item => new Paragraph({
+    text: item,
+    bullet: { level: 0 },
+    indent: { left: 720, hanging: 360 },
+    spacing: { after: 150 },
+}));
+
 
 export const exportToDocx = (proposal: GeneratedProposal, clientName: string, executiveName: string, executiveRole: string) => {
     const doc = new Document({
@@ -120,20 +127,13 @@ export const exportToDocx = (proposal: GeneratedProposal, clientName: string, ex
 
                 ...createSection("Executive Summary", [new TextRun(proposal.executiveSummary)]),
                 ...createSection("Understanding the Challenge", [new TextRun(proposal.problemStatement)]),
-                ...createSection("Proposed Solution & Scope of Work", proposal.proposedSolution.map(item => new Paragraph({
-                    text: item,
-                    bullet: { level: 0 },
-                    indent: { left: 720, hanging: 360 },
-                    spacing: { after: 150 },
-                }))),
-                ...createSection("90-Day Plan", proposal.ninetyDayPlan.map(item => new Paragraph({
-                    text: item,
-                    bullet: { level: 0 },
-                    indent: { left: 720, hanging: 360 },
-                    spacing: { after: 150 },
-                }))),
+                ...createSection("Proposed Solution & Scope of Work", createBulletedList(proposal.proposedSolution)),
+                ...createSection("Measuring Success", createBulletedList(proposal.measuringSuccess)),
+                ...createSection("Exclusions (Out of Scope)", createBulletedList(proposal.exclusions)),
+                ...createSection("90-Day Plan", createBulletedList(proposal.ninetyDayPlan)),
                 ...createSection("Timeline", [new TextRun(proposal.timeline)]),
                 ...createSection("Investment", [new TextRun(proposal.investment)]),
+                ...createSection("Client Responsibilities", createBulletedList(proposal.clientResponsibilities)),
                 ...createSection("About", [new TextRun(proposal.about)]),
                 ...createSection("Next Steps", [new TextRun(proposal.nextSteps)]),
                 new Paragraph({
@@ -147,12 +147,7 @@ export const exportToDocx = (proposal: GeneratedProposal, clientName: string, ex
                     ],
                     spacing: { before: 400, after: 200 },
                 }),
-                ...createSection("Terms & Conditions", proposal.termsAndConditions.map(item => new Paragraph({
-                    text: item,
-                    bullet: { level: 0 },
-                    indent: { left: 720, hanging: 360 },
-                    spacing: { after: 150 },
-                }))),
+                ...createSection("Terms & Conditions", createBulletedList(proposal.termsAndConditions)),
                 new Paragraph({
                     children: [new TextRun({ text: "Agreement & Signature", bold: true, size: 28 })],
                     spacing: { before: 400, after: 300 },

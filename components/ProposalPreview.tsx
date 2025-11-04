@@ -1,4 +1,3 @@
-
 import React, { useLayoutEffect, useRef } from 'react';
 import { GeneratedProposal } from '../types';
 
@@ -55,12 +54,44 @@ const ProposalPreview: React.FC<ProposalPreviewProps> = ({ proposal, onAboutChan
                 </ul>
             </Section>
 
+            <Section title="Measuring Success">
+                <ul>
+                    {proposal.measuringSuccess.map((item, index) => (
+                        <li key={index}>{item}</li>
+                    ))}
+                </ul>
+            </Section>
+
+            <Section title="Exclusions (Out of Scope)">
+                <ul>
+                    {proposal.exclusions.map((item, index) => (
+                        <li key={index}>{item}</li>
+                    ))}
+                </ul>
+            </Section>
+
+            <Section title="90-Day Plan">
+                 <ul>
+                    {proposal.ninetyDayPlan.map((item, index) => (
+                        <li key={index}>{item}</li>
+                    ))}
+                </ul>
+            </Section>
+
             <Section title="Timeline">
                 <p>{proposal.timeline}</p>
             </Section>
 
             <Section title="Investment">
                 <p>{proposal.investment}</p>
+            </Section>
+            
+            <Section title="Client Responsibilities">
+                <ul>
+                    {proposal.clientResponsibilities.map((item, index) => (
+                        <li key={index}>{item}</li>
+                    ))}
+                </ul>
             </Section>
 
             <Section title="About">
