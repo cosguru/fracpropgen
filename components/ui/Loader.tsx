@@ -3,7 +3,7 @@ import React from 'react';
 
 const Loader: React.FC = () => (
     <svg 
-        className="animate-spin h-10 w-10 text-brandGreen-600" 
+        className="animate-spin h-10 w-10 text-indigo-600" 
         xmlns="http://www.w3.org/2000/svg" 
         fill="none" 
         viewBox="0 0 24 24"

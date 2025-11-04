@@ -16,12 +16,13 @@ const Button: React.FC<ButtonProps> = ({ children, className, isLoading, icon, .
             {...props}
             disabled={isDisabled}
             className={`
-                flex justify-center items-center px-5 py-3 border border-transparent 
-                text-base font-medium rounded-lg shadow-sm text-white 
-                bg-brandGreen-600 hover:bg-brandGreen-700 
-                focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brandGreen-500
-                disabled:bg-slate-400 disabled:cursor-not-allowed
-                transition-all duration-200
+                flex justify-center items-center px-6 py-3 border border-transparent 
+                text-base font-medium rounded-full shadow-md text-white 
+                bg-gradient-to-r from-indigo-500 to-indigo-600
+                hover:shadow-lg hover:-translate-y-0.5
+                focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500
+                disabled:bg-slate-400 disabled:cursor-not-allowed disabled:shadow-none disabled:transform-none
+                transition-all duration-300
                 ${className}
             `}
         >
